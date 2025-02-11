@@ -84,9 +84,9 @@ if(empty($errors)){
     $password = $_POST['psw'];
     $psw_repeat = $_POST['psw_repeat'];
 
-    $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname=mydb', 'user', 'pass');
-
     $password = password_hash($password, PASSWORD_DEFAULT);
+
+    $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname=mydb', 'user', 'pass');
     $statement = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
     $statement->execute(['name' => $name, 'email' => $email, 'password' => $password]);
 
