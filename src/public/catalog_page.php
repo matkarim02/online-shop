@@ -7,6 +7,7 @@
 </head>
 <body>
 <div class="container">
+    <a href="profile_handle.php"> Мой профиль</a>
     <h3>Catalog</h3>
     <div class="card-deck">
         <?php foreach ($products as $product): ?>
