@@ -32,7 +32,7 @@ function validate(array $data): array
             $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname=mydb', 'user', 'pass');
 
             $statement = $pdo->prepare('SELECT * FROM users WHERE email = :email');
-            $statement->execute(['email' => $email]);
+            $statement->execute([':email' => $email]);
             $count_email = $statement->fetch();
 
             if($count_email){
