@@ -50,6 +50,14 @@ if ($requestUri === '/registration') {
         echo "Invalid request method";
     }
 
+} elseif ($requestUri === "/addProduct") {
+
+    if ($requestMethod === "GET") {
+        require_once './add_product.php';
+    } elseif ($requestMethod === "POST") {
+        require_once './handle_add_product.php';
+    }
+
 } else {
     http_response_code(404);
     require_once './404.php';
