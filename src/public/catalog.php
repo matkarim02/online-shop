@@ -19,7 +19,7 @@ if(isset($_SESSION['userId'])){
     require_once './catalog_page.php';
 
 } else {
-    header("Location: /login_form.php");
+    header("Location: /login");
 }
 
 

@@ -98,7 +98,7 @@ if(isset($_SESSION['userId'])) {
     </style>
 </head>
 <body>
-<form class="profile-container" action="edit_profile_handle.php" method="POST">
+<form class="profile-container" action="/editProfile" method="POST">
     <img src="https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg" alt="Фото профиля" class="profile-img">
 
     <div class="profile-info">

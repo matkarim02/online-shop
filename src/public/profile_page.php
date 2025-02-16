@@ -21,8 +21,10 @@
             border-radius: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             padding: 30px;
-            width: 400px;
+            width: 450px;
             text-align: center;
+            overflow: hidden; /* Обрезает контент, если он выходит */
+            box-sizing: border-box;
         }
 
         .profile-img {
@@ -51,21 +53,26 @@
         }
 
         .edit-btn {
+            display: block;
+            text-align: center;
+            text-decoration: none;
             background: #35B729;
             color: white;
-            border: none;
             padding: 12px 20px;
             font-size: 16px;
             border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
-            width: 100%;
-            margin-top: 20px;
+            width: calc(100% - 40px); /* Убираем лишние отступы */
+            margin: 20px auto 0 auto;
+            border: none;
+            box-sizing: border-box; /* Учитываем padding в ширине */
         }
 
         .edit-btn:hover {
             background: #2a8c20;
         }
+
 
         input {
             width: 100%;
@@ -78,13 +85,13 @@
     </style>
 </head>
 <body>
-<form class="profile-container" action="edit_profile_page.php">
+<div class="profile-container">
     <img src="https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg" alt="Фото профиля" class="profile-img">
     <h2> <?php echo $user['name']; ?> </h2>
     <div class="profile-info">
         <p><strong>Email:</strong> <?php echo $user['email']; ?> </p>
     </div>
-    <button class="edit-btn">Редактировать профиль</button>
-</form>
+    <a href="/editProfile" class="edit-btn">Редактировать профиль</a>
+</div>
 </body>
 </html>

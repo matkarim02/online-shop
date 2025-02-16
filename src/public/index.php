@@ -1,14 +1,57 @@
 <?php
 
+$requestUri = $_SERVER['REQUEST_URI'];
+$requestMethod = $_SERVER['REQUEST_METHOD'];
 
 
-$pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname=mydb', 'user', 'pass');
+if ($requestUri === '/registration') {
 
-//$pdo->exec("INSERT INTO users (name, email, password) VALUES ('matkarim', 'matkarim@mail.ru', 'make2003')");
+    if ($requestMethod === 'GET') {
+        require_once './registration_form.php';
+    } elseif ($requestMethod === 'POST') {
+        require_once './handle_registration_form.php';
+    } else {
+        echo 'Invalid request method';
+    }
 
-$statement = $pdo->query("SELECT * FROM users");
+} elseif ($requestUri === '/login') {
 
-$users = $statement->fetch();
-echo '<pre>';
-print_r($users);
-echo '</pre>';
+    if ($requestMethod === 'GET') {
+        require_once './login_form.php';
+    } elseif ($requestMethod === 'POST') {
+        require_once './login_handle.php';
+    } else {
+        echo 'Invalid request method';
+    }
+
+} elseif ($requestUri === '/catalog') {
+
+    if ($requestMethod === 'GET') {
+        require_once './catalog.php';
+    } else {
+        echo "Invalid request method";
+    }
+
+} elseif($requestUri === "/profile") {
+
+    if ($requestMethod === "GET") {
+        require_once "./profile_handle.php";
+    } else {
+        echo "Invalid request method";
+    }
+
+} elseif ($requestUri === "/editProfile") {
+
+    if ($requestMethod === "GET") {
+        require_once './edit_profile_page.php';
+    } elseif ($requestMethod === "POST") {
+        require_once './edit_profile_handle.php';
+    } else {
+        echo "Invalid request method";
+    }
+
+} else {
+    http_response_code(404);
+    require_once './404.php';
+
+}

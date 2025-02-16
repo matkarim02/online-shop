@@ -5,7 +5,7 @@ if(session_status() !== PHP_SESSION_ACTIVE){
 }
 
 if(!isset($_SESSION['userId'])){
-    header("Location: /login_form.php");
+    header("Location: /login");
     exit();
 }
 
@@ -104,7 +104,7 @@ if(empty($errors)){
 
 
 
-    header('Location: /profile_handle.php');
+    header('Location: /profile');
     exit();
 
 }

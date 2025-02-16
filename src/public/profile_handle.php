@@ -12,5 +12,5 @@ if(isset($_SESSION['userId'])){
 
     require_once './profile_page.php';
 } else {
-    header("Location: /login_form.php");
+    header("Location: /login");
 }

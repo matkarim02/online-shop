@@ -122,7 +122,7 @@
     </style>
 </head>
 <body>
-<form action="handle_registration_form.php" method="POST">
+<form action="/registration" method="POST">
     <div class="container">
         <h1>Регистрация</h1>
         <p>Пожалуйста, заполните форму для создания аккаунта.</p>
@@ -165,7 +165,7 @@
         <button type="submit" class="registerbtn">Зарегистрироваться</button>
 
         <div class="signin">
-            <p>Уже есть аккаунт? <a href="#">Войти</a>.</p>
+            <p>Уже есть аккаунт? <a href="/login">Войти</a>.</p>
         </div>
     </div>
 </form>

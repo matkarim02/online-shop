@@ -183,7 +183,7 @@
     </div>
     <!-- backbox -->
     <div class="frontbox">
-        <form class="login" action = 'login_handle.php' method="POST">
+        <form class="login" action = '/login' method="POST">
             <h2>Вход</h2>
             <div class="inputbox">
                 <input type="text" name="username" placeholder="Email">
