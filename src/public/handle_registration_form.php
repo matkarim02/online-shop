@@ -91,10 +91,10 @@ if(empty($errors)){
     $statement->execute(['name' => $name, 'email' => $email, 'password' => $password]);
 
 
-    $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-    $statement->execute(['email' => $email]);
-    $user = $statement->fetch();
-    print_r($user);
+//    $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+//    $statement->execute(['email' => $email]);
+//    $user = $statement->fetch();
+//    print_r($user);
 
 //    $statement = $pdo->query("SELECT * FROM users ORDER BY id DESC LIMIT 1");
 //    $users = $statement->fetch();
