@@ -56,6 +56,16 @@ if ($requestUri === '/registration') {
         require_once './add_product.php';
     } elseif ($requestMethod === "POST") {
         require_once './handle_add_product.php';
+    } else {
+        echo "Invalid request method";
+    }
+
+} elseif($requestUri === "/cart") {
+
+    if ($requestMethod === "GET") {
+        require_once './cart_handle.php';
+    } else {
+        echo "Invalid request method";
     }
 
 } else {
