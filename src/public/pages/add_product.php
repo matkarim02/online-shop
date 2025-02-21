@@ -92,14 +92,14 @@
     <form action="/addProduct" method="POST">
         <div class="input-group">
             <label for="product_id">ID товара</label>
-            <input type="number" id="product_id" name="product_id" required>
+            <input  id="product_id" name="product_id" >
             <?php if(isset($errors['product_id'])): ?>
                 <p style="color: red" class = "errors"> <?php echo $errors['product_id'] ?> </p>
             <?php endif; ?>
         </div>
         <div class="input-group">
             <label for="amount">Количество</label>
-            <input type="number" id="amount" name="amount" required>
+            <input type="number" id="amount" name="amount" >
             <?php if(isset($errors['amount'])): ?>
                 <p style="color: red" class = "errors"> <?php echo $errors['amount'] ?> </p>
             <?php endif; ?>

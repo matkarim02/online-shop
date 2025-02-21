@@ -5,65 +5,81 @@ $requestMethod = $_SERVER['REQUEST_METHOD'];
 
 
 if ($requestUri === '/registration') {
+    require_once './classes/User.php';
+    $user = new User();
 
     if ($requestMethod === 'GET') {
-        require_once './registration_form.php';
+        $user->getRegistrate();
     } elseif ($requestMethod === 'POST') {
-        require_once './handle_registration_form.php';
+        $user->registrate();
     } else {
         echo 'Invalid request method';
     }
 
 } elseif ($requestUri === '/login') {
+    require_once './classes/User.php';
+    $user = new User();
 
     if ($requestMethod === 'GET') {
-        require_once './login_form.php';
+        $user->getLogin();
     } elseif ($requestMethod === 'POST') {
-        require_once './login_handle.php';
+        $user->login();
     } else {
         echo 'Invalid request method';
     }
 
 } elseif ($requestUri === '/catalog') {
+    require_once './classes/Catalog.php';
+    $catalog = new Catalog();
 
     if ($requestMethod === 'GET') {
-        require_once './catalog.php';
+        $catalog->getCatalog();
     } else {
         echo "Invalid request method";
     }
 
 } elseif($requestUri === "/profile") {
+    require_once './classes/User.php';
+    $user = new User();
 
     if ($requestMethod === "GET") {
-        require_once "./profile_handle.php";
+        $user->getProfile();
+    }elseif($requestMethod === "POST"){
+        $user->getProfile();
     } else {
         echo "Invalid request method";
     }
 
 } elseif ($requestUri === "/editProfile") {
+    require_once './classes/User.php';
+    $user = new User();
 
     if ($requestMethod === "GET") {
-        require_once './edit_profile_page.php';
+        $user->getEditProfile();
     } elseif ($requestMethod === "POST") {
-        require_once './edit_profile_handle.php';
+        $user->editProfile();
     } else {
         echo "Invalid request method";
     }
 
 } elseif ($requestUri === "/addProduct") {
-
+    require_once './classes/Cart.php';
+    $cartProduct = new Cart();
     if ($requestMethod === "GET") {
-        require_once './add_product.php';
+        $cartProduct->getAddProduct();
     } elseif ($requestMethod === "POST") {
-        require_once './handle_add_product.php';
+        $cartProduct->addProduct();
     } else {
         echo "Invalid request method";
     }
 
 } elseif($requestUri === "/cart") {
-
+    require_once './classes/Cart.php';
+    $cart = new Cart();
     if ($requestMethod === "GET") {
-        require_once './cart_handle.php';
+        $cart->getCart();
+    } elseif ($requestMethod === "POST") {
+        require_once './pages/cart.php'; //ASK?
     } else {
         echo "Invalid request method";
     }
