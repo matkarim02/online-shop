@@ -31,7 +31,7 @@ class Cart
                 $stmt->execute(['productId' => $productId]);
                 $product = $stmt->fetch();
 
-                if ($product) {
+                if ($product && !empty($userProduct['amount'])) {
                     $products[] = array_merge($userProduct, $product);
                 }
             }
@@ -124,7 +124,7 @@ class Cart
                 $stmt->execute(['user_id' => $user_id, 'product_id' => $product_id, 'amount' => $amount]);
             }
         }
-
-        require_once './pages/add_product.php';
+            header('location: /catalog');
+//        require_once './pages/add_product.php';
     }
 }
