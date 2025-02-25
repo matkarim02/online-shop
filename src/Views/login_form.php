@@ -171,7 +171,7 @@
             <div class="textcontent">
                 <p class="title">Нет аккаунта?</p>
                 <p>Зарегистрируйтесь, чтобы сохранить свой прогресс.</p>
-                <button>Регистрация</button>
+                <button onclick="window.location.href='/registration'">Регистрация</button>
             </div>
         </div>
         <div class="signupMsg">
@@ -187,9 +187,15 @@
             <h2>Вход</h2>
             <div class="inputbox">
                 <input type="text" name="username" placeholder="Email">
+                <?php if(isset($errors['username'])): ?>
+                    <p style="color: red" class = "errors"> <?php echo $errors['username'] ?> </p>
+                <?php endif; ?>
                 <input type="password" name="password" placeholder="Пароль">
                 <?php if(isset($errors['username'])): ?>
                     <p style="color: red" class = "errors"> <?php echo $errors['username'] ?> </p>
+                <?php endif; ?>
+                <?php if(isset($errors['password'])): ?>
+                    <p style="color: red" class = "errors"> <?php echo $errors['password'] ?> </p>
                 <?php endif; ?>
             </div>
             <button>Войти</button>

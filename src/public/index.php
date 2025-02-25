@@ -1,12 +1,13 @@
 <?php
 
+
 $requestUri = $_SERVER['REQUEST_URI'];
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
 
 if ($requestUri === '/registration') {
-    require_once './classes/User.php';
-    $user = new User();
+    require_once '../Controllers/UserController.php';
+    $user = new UserController();
 
     if ($requestMethod === 'GET') {
         $user->getRegistrate();
@@ -17,8 +18,8 @@ if ($requestUri === '/registration') {
     }
 
 } elseif ($requestUri === '/login') {
-    require_once './classes/User.php';
-    $user = new User();
+    require_once '../Controllers/UserController.php';
+    $user = new UserController();
 
     if ($requestMethod === 'GET') {
         $user->getLogin();
@@ -29,8 +30,8 @@ if ($requestUri === '/registration') {
     }
 
 } elseif ($requestUri === '/catalog') {
-    require_once './classes/Catalog.php';
-    $catalog = new Catalog();
+    require_once '../Controllers/CatalogController.php';
+    $catalog = new CatalogController();
 
     if ($requestMethod === 'GET') {
         $catalog->getCatalog();
@@ -39,8 +40,8 @@ if ($requestUri === '/registration') {
     }
 
 } elseif($requestUri === "/profile") {
-    require_once './classes/User.php';
-    $user = new User();
+    require_once '../Controllers/UserController.php';
+    $user = new UserController();
 
     if ($requestMethod === "GET") {
         $user->getProfile();
@@ -51,8 +52,8 @@ if ($requestUri === '/registration') {
     }
 
 } elseif ($requestUri === "/editProfile") {
-    require_once './classes/User.php';
-    $user = new User();
+    require_once '../Controllers/UserController.php';
+    $user = new UserController();
 
     if ($requestMethod === "GET") {
         $user->getEditProfile();
@@ -63,8 +64,8 @@ if ($requestUri === '/registration') {
     }
 
 } elseif ($requestUri === "/addProduct") {
-    require_once './classes/Cart.php';
-    $cartProduct = new Cart();
+    require_once '../Controllers/CartController.php';
+    $cartProduct = new CartController();
     if ($requestMethod === "GET") {
         $cartProduct->getAddProduct();
     } elseif ($requestMethod === "POST") {
@@ -74,12 +75,12 @@ if ($requestUri === '/registration') {
     }
 
 } elseif($requestUri === "/cart") {
-    require_once './classes/Cart.php';
-    $cart = new Cart();
+    require_once '../Controllers/CartController.php';
+    $cart = new CartController();
     if ($requestMethod === "GET") {
         $cart->getCart();
     } elseif ($requestMethod === "POST") {
-        require_once './pages/cart.php'; //ASK?
+        require_once '../Views/cart.php'; //ASK?
     } else {
         echo "Invalid request method";
     }
