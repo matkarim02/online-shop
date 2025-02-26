@@ -92,6 +92,7 @@
         <p><strong>Email:</strong> <?php echo $user['email']; ?> </p>
     </div>
     <a href="/editProfile" class="edit-btn">Редактировать профиль</a>
+    <a href="/logout" class="edit-btn">Выйти</a>
 </div>
 </body>
 </html>

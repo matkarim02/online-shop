@@ -16,7 +16,7 @@
                 <div class="card-header">Hit!</div>
                 <img class="card-img-top" src="<?php echo $product['image_url'];?>" alt="Card image">
                 <div class="card-body">
-                    <p class="card-text text-muted"><?php echo $product['name'];?></p>
+                    <h2 class="card-text"><?php echo $product['name'];?></h2>
                     <h5 class="card-title"><?php echo $product['description'];?></h5>
                 </div>
                 <div class="card-footer">
@@ -107,9 +107,18 @@
     .card-body .card-title {
         font-size: 16px;
         font-weight: bold;
-        color: #007bff;
+        color: #35B729;
         margin: 5px 0;
     }
+
+    .card-text {
+        font-size: 20px;
+        font-weight: bold;
+        color: #393939;
+        margin: 5px 0;
+    }
+
+
     .card-footer {
         font-size: 18px;
         font-weight: bold;
@@ -174,7 +183,7 @@
         font-size: 14px;
         font-weight: bold;
         color: #fff;
-        background-color: #007bff;
+        background-color: #35B729;
         border: none;
         border-radius: 6px;
         cursor: pointer;
@@ -185,7 +194,7 @@
     }
 
     .form-button:hover {
-        background-color: #0056b3;
+        background-color: #2a8c20;
         transform: scale(1.05);
     }
 

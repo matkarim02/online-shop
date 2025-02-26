@@ -6,9 +6,9 @@ if(session_status() !== PHP_SESSION_ACTIVE){
 
 if(isset($_SESSION['userId'])) {
     $userId = $_SESSION['userId'];
-    $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname=mydb', 'user', 'pass');
-    $stmt = $pdo->query("SELECT * FROM users WHERE id = $userId");
-    $user = $stmt->fetch();
+    require_once "../Model/User.php";
+    $userModel = new User();
+    $user = $userModel->getById($userId);
 } else {
     header("Location: /login_form.php");
 }

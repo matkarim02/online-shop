@@ -23,6 +23,7 @@ class CartController
 
         if ($userProducts) {
             $products = [];
+            $total = 0;
             foreach ($userProducts as $userProduct) {
                 $user_productId = $userProduct['product_id'];
 
