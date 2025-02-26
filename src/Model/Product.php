@@ -1,12 +1,10 @@
 <?php
 
-class Product
-{
-    private PDO $pdo;
+require_once "../Model/Model.php";
 
-    public function __construct(){
-        $this->pdo = new Pdo('pgsql:host=postgres_db;port=5432;dbname=mydb', 'user', 'pass');
-    }
+class Product extends Model
+{
+
 
     public function getProduct(): array|false
     {

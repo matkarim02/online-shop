@@ -1,13 +1,9 @@
 <?php
 
-class UserProduct
+require_once "../Model/Model.php";
+
+class UserProduct extends Model
 {
-
-    private Pdo $pdo;
-
-    public function __construct(){
-        $this->pdo = new Pdo('pgsql:host=postgres_db;port=5432;dbname=mydb', 'user', 'pass');
-    }
 
 
     public function getUserProductsById(int $userId): array|false
