@@ -6,6 +6,15 @@ use Model\UserProduct;
 
 class CartController
 {
+    private $userProductModel;
+    private $productModel;
+
+    public function __construct()
+    {
+        $this->userProductModel = new UserProduct();
+        $this->productModel = new Product();
+    }
+
     public function getCart()
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -21,8 +30,8 @@ class CartController
         $userId = $_SESSION['userId'];
 
 
-        $userProductModel = new UserProduct();
-        $userProducts = $userProductModel->getUserProductsById($userId);
+
+        $userProducts = $this->userProductModel->getUserProductsById($userId);
 
 
         if ($userProducts) {
@@ -31,8 +40,8 @@ class CartController
             foreach ($userProducts as $userProduct) {
                 $user_productId = $userProduct['product_id'];
 
-                $productModel = new Product();
-                $product = $productModel->getProductById($user_productId);
+
+                $product = $this->productModel->getProductById($user_productId);
 
                 if ($product && !empty($userProduct['amount'])) {
                     $products[] = array_merge($userProduct, $product);
@@ -62,8 +71,8 @@ class CartController
         if (!empty($data['product_id'])) {
             $product_id = (int)$data['product_id'];
 
-            $productModel = new Product();
-            $product = $productModel->getProductById($product_id);
+
+            $product = $this->productModel->getProductById($product_id);
 
             if ($product === false) {
                 $errors['product_id'] = "Product does not exist";
@@ -102,17 +111,17 @@ class CartController
             $product_id = $_POST['product_id'];
             $amount = $_POST['amount'];
 
-            $userProductModel = new UserProduct();
-            $user_product = $userProductModel->getById($user_id, $product_id);
+
+            $user_product = $this->userProductModel->getById($user_id, $product_id);
 
             if ($user_product) {
                 $amount = $user_product['amount'] + $amount;
 
-                $userProductModel->updateAmountById($user_id, $product_id, $amount);
+                $this->userProductModel->updateAmountById($user_id, $product_id, $amount);
 
             } else {
 
-                $userProductModel->setUserProduct($user_id, $product_id, $amount);
+                $this->userProductModel->setUserProduct($user_id, $product_id, $amount);
 
             }
         }

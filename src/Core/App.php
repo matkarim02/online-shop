@@ -92,7 +92,6 @@ class App
                 $class = $handler['class'];
                 $method = $handler['method'];
 
-//                require_once "../Controllers/{$class}.php";
 
                 $controller = new $class();
                 $controller->$method();

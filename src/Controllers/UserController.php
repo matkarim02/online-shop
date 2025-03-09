@@ -6,6 +6,13 @@ use Model\User;
 
 class UserController
 {
+
+    private User $userModel;
+
+    public function __construct()
+    {
+        $this->userModel = new User();
+    }
     public function getRegistrate(): void
     {
 //        session_start();
@@ -45,8 +52,8 @@ class UserController
             } else {
 
 
-                $userModel = new User();
-                $count_email = $userModel->getByEmail($email);
+
+                $count_email = $this->userModel->getByEmail($email);
 
                 if ($count_email) {
                     $errors['email'] = 'Электронная почта занята';
@@ -93,8 +100,8 @@ class UserController
             $password = password_hash($password, PASSWORD_DEFAULT);
 
 
-            $userModel = new User();
-            $userModel->insertToUsers($name, $email, $password);
+
+            $this->userModel->insertToUsers($name, $email, $password);
 
 
 //    $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
@@ -152,8 +159,8 @@ class UserController
 
 
 
-            $userModel = new User();
-            $user = $userModel->getByEmail($username);
+
+            $user = $this->userModel->getByEmail($username);
 
             $errors = [];
 
@@ -193,9 +200,8 @@ class UserController
             $userId = $_SESSION['userId'];
 
 
-            $userModel = new User();
 
-            $user = $userModel->getById($userId);
+            $user = $this->userModel->getById($userId);
 
             require_once '../Views/profile_page.php';
         } else {
@@ -259,8 +265,8 @@ class UserController
                 $errors['email'] = 'Электронная почта должна быть правильным';
             } else {
 
-                $userModel = new User();
-                $user = $userModel->getByEmail($email);
+
+                $user = $this->userModel->getByEmail($email);
 
 
                 $userId = $_SESSION['userId'];
@@ -306,24 +312,24 @@ class UserController
             $email = $_POST['email'];
             $userId = $_SESSION['userId'];
 
-            $userModel = new User();
-            $user = $userModel->getById($userId);
+
+            $user = $this->userModel->getById($userId);
 
 
 
             if ($user['name'] !== $name) {
                 $name = $_POST['name'];
-                $userModel->updateNameById($userId, $name);
+                $this->userModel->updateNameById($userId, $name);
             }
             if ($user['email'] !== $email) {
                 $email = $_POST['email'];
-                $userModel->updateEmailById($userId, $email);
+                $this->userModel->updateEmailById($userId, $email);
 
             }
             if (isset($_POST['password'])) {
                 $psw = $_POST['password'];
                 $psw = password_hash($psw, PASSWORD_DEFAULT);
-                $userModel->updatePasswordById($userId, $psw);
+                $this->userModel->updatePasswordById($userId, $psw);
 
             }
 
