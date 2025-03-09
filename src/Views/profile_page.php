@@ -4,95 +4,135 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Профиль</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #333;
+            --accent-color: #4a6fff;
+            --bg-color: #f9f9f9;
+            --card-color: #ffffff;
+            --text-color: #333;
+            --border-radius: 12px;
+        }
+
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(to right, #e3f9e5, #c1e1c5);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            color: var(--text-color);
         }
 
         .profile-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            padding: 30px;
-            width: 450px;
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            width: 380px;
             text-align: center;
-            overflow: hidden; /* Обрезает контент, если он выходит */
             box-sizing: border-box;
         }
 
         .profile-img {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #35B729;
+            border: 3px solid white;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         }
 
         h2 {
-            color: #2c3e50;
-            font-size: 26px;
-            margin: 15px 0;
+            color: var(--primary-color);
+            font-size: 22px;
+            font-weight: 600;
+            margin: 20px 0 5px;
+            letter-spacing: -0.5px;
         }
 
         .profile-info {
             text-align: left;
-            margin-top: 20px;
+            margin: 30px 0;
         }
 
-        .profile-info p {
-            font-size: 18px;
-            color: #333;
-            margin: 10px 0;
+        .info-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
         }
 
-        .edit-btn {
-            display: block;
-            text-align: center;
-            text-decoration: none;
-            background: #35B729;
-            color: white;
-            padding: 12px 20px;
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
             font-size: 16px;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .btn {
+            display: block;
+            text-decoration: none;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 500;
             border-radius: 8px;
             cursor: pointer;
-            transition: 0.3s;
-            width: calc(100% - 40px); /* Убираем лишние отступы */
-            margin: 20px auto 0 auto;
+            transition: all 0.2s ease;
+            margin-bottom: 12px;
+        }
+
+        .primary-btn {
+            background-color: var(--accent-color);
+            color: white;
             border: none;
-            box-sizing: border-box; /* Учитываем padding в ширине */
         }
 
-        .edit-btn:hover {
-            background: #2a8c20;
+        .primary-btn:hover {
+            background-color: #3a5be0;
+            transform: translateY(-2px);
         }
 
+        .secondary-btn {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid #eaeaea;
+        }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+        .secondary-btn:hover {
+            background-color: #f5f5f5;
+            border-color: #ddd;
         }
     </style>
 </head>
 <body>
 <div class="profile-container">
     <img src="https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg" alt="Фото профиля" class="profile-img">
-    <h2> <?php echo $user['name']; ?> </h2>
+    <h2><?php echo $user['name']; ?></h2>
+
     <div class="profile-info">
-        <p><strong>Email:</strong> <?php echo $user['email']; ?> </p>
+        <div class="info-item">
+            <div class="info-label">Email</div>
+            <div class="info-value"><?php echo $user['email']; ?></div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Статус</div>
+            <div class="info-value">Активный</div>
+        </div>
     </div>
-    <a href="/editProfile" class="edit-btn">Редактировать профиль</a>
-    <a href="/logout" class="edit-btn">Выйти</a>
+
+    <a href="/editProfile" class="btn primary-btn">Редактировать профиль</a>
+    <a href="/logout" class="btn secondary-btn">Выйти</a>
 </div>
 </body>
 </html>

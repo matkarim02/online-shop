@@ -1,5 +1,7 @@
 <?php
 
+namespace Controllers;
+use Model\Product;
 
 class CatalogController
 {
@@ -13,7 +15,6 @@ class CatalogController
 
         if (isset($_SESSION['userId'])) {
 
-            require_once '../Model/Product.php';
             $productModel = new Product();
             $products = $productModel->getProduct();
 

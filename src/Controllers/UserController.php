@@ -1,6 +1,8 @@
 <?php
 
+namespace Controllers;
 
+use Model\User;
 
 class UserController
 {
@@ -42,7 +44,7 @@ class UserController
                 $errors['email'] = 'Электронная почта должна быть правильным';
             } else {
 
-                require_once '../Model/User.php';
+
                 $userModel = new User();
                 $count_email = $userModel->getByEmail($email);
 
@@ -90,7 +92,7 @@ class UserController
 
             $password = password_hash($password, PASSWORD_DEFAULT);
 
-            require_once '../Model/User.php';
+
             $userModel = new User();
             $userModel->insertToUsers($name, $email, $password);
 
@@ -149,7 +151,7 @@ class UserController
             $password = $_POST['password'];
 
 
-            require_once '../Model/User.php';
+
             $userModel = new User();
             $user = $userModel->getByEmail($username);
 
@@ -190,7 +192,7 @@ class UserController
         if (isset($_SESSION['userId'])) {
             $userId = $_SESSION['userId'];
 
-            require_once '../Model/User.php';
+
             $userModel = new User();
 
             $user = $userModel->getById($userId);
@@ -257,7 +259,6 @@ class UserController
                 $errors['email'] = 'Электронная почта должна быть правильным';
             } else {
 
-                require_once '../Model/User.php';
                 $userModel = new User();
                 $user = $userModel->getByEmail($email);
 
@@ -305,9 +306,7 @@ class UserController
             $email = $_POST['email'];
             $userId = $_SESSION['userId'];
 
-            require_once '../Model/User.php';
             $userModel = new User();
-
             $user = $userModel->getById($userId);
 
 

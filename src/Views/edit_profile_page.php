@@ -1,12 +1,12 @@
 <?php
-
+use Model\User;
 if(session_status() !== PHP_SESSION_ACTIVE){
     session_start();
 }
 
 if(isset($_SESSION['userId'])) {
     $userId = $_SESSION['userId'];
-    require_once "../Model/User.php";
+
     $userModel = new User();
     $user = $userModel->getById($userId);
 } else {
@@ -23,110 +23,241 @@ if(isset($_SESSION['userId'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Профиль</title>
+    <title>Редактирование профиля</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(to right, #e3f9e5, #c1e1c5);
+        :root {
+            --bg-color: #f5f7fa;
+            --card-color: #ffffff;
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --text-color: #333;
+            --light-text: #667085;
+            --border-color: #e4e7ec;
+            --error-color: #f44336;
+            --success-color: #10b981;
+            --focus-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .profile-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            padding: 30px;
-            width: 400px;
-            text-align: center;
+            background: var(--card-color);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 32px;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .profile-img-container {
+            position: relative;
+            margin-bottom: 16px;
         }
 
         .profile-img {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #35B729;
+            border: 3px solid white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--primary-color);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-section {
+            margin-bottom: 24px;
         }
 
         h2 {
-            color: #2c3e50;
-            font-size: 26px;
-            margin: 15px 0;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 24px;
+            text-align: center;
         }
 
-        .profile-info {
-            text-align: left;
-            margin-top: 20px;
+        .form-group {
+            margin-bottom: 20px;
         }
 
-        .profile-info p {
-            font-size: 18px;
-            color: #333;
-            margin: 10px 0;
-        }
-
-        .edit-btn {
-            background: #35B729;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        .edit-btn:hover {
-            background: #2a8c20;
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--light-text);
         }
 
         input {
             width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+            padding: 12px 14px;
+            font-size: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            color: var(--text-color);
+            background-color: var(--card-color);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: var(--focus-shadow);
+        }
+
+        input::placeholder {
+            color: #a0aec0;
+        }
+
+        .error-message {
+            font-size: 13px;
+            color: var(--error-color);
+            margin-top: 6px;
+        }
+
+        .section-divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 24px 0;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 12px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .cancel-link {
+            display: block;
+            text-align: center;
+            margin-top: 16px;
+            color: var(--light-text);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .cancel-link:hover {
+            color: var(--text-color);
+        }
+
+        /* Icon for upload button */
+        .icon {
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
 <form class="profile-container" action="/editProfile" method="POST">
-    <img src="https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg" alt="Фото профиля" class="profile-img">
-
-    <div class="profile-info">
-        <label for="name">Имя:</label>
-        <input type="text" id="name" name="name" value="<?php echo ($user['name']); ?>" >
-        <?php if(isset($errors['name'])): ?>
-            <p style="color: red" class = "errors"> <?php echo $errors['name'] ?> </p>
-        <?php endif; ?>
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="<?php echo ($user['email']); ?>" >
-        <?php if(isset($errors['email'])): ?>
-            <p style="color: red" class = "errors"> <?php echo $errors['email'] ?> </p>
-        <?php endif; ?>
-
-        <label for="password">Новый пароль (необязательно):</label>
-        <input type="password" id="password" name="password" placeholder="Введите новый пароль">
-        <?php if(isset($errors['password'])): ?>
-            <p style="color: red" class = "errors"> <?php echo $errors['password'] ?> </p>
-        <?php endif; ?>
-
-        <label for="password">Повторите новый пароль (необязательно):</label>
-        <input type="password" id="password_rpt" name="password_rpt" placeholder="Введите новый пароль">
-        <?php if(isset($errors['password_rpt'])): ?>
-            <p style="color: red" class = "errors"> <?php echo $errors['password_rpt'] ?> </p>
-        <?php endif; ?>
+    <div class="profile-header">
+        <div class="profile-img-container">
+            <img src="https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg" alt="Фото профиля" class="profile-img">
+            <div class="upload-overlay" title="Загрузить новое фото">
+                <span class="icon">+</span>
+            </div>
+        </div>
+        <h2>Редактирование профиля</h2>
     </div>
-    <button class="edit-btn">Сохранить изменения</button>
+
+    <div class="form-section">
+        <div class="form-group">
+            <label for="name">Имя</label>
+            <input type="text" id="name" name="name" value="<?php echo ($user['name']); ?>" >
+            <?php if(isset($errors['name'])): ?>
+                <div class="error-message"><?php echo $errors['name'] ?></div>
+            <?php endif; ?>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="<?php echo ($user['email']); ?>" >
+            <?php if(isset($errors['email'])): ?>
+                <div class="error-message"><?php echo $errors['email'] ?></div>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="form-section">
+        <div class="form-group">
+            <label for="password">Новый пароль (необязательно)</label>
+            <input type="password" id="password" name="password" placeholder="Введите новый пароль">
+            <?php if(isset($errors['password'])): ?>
+                <div class="error-message"><?php echo $errors['password'] ?></div>
+            <?php endif; ?>
+        </div>
+
+        <div class="form-group">
+            <label for="password_rpt">Повторите новый пароль</label>
+            <input type="password" id="password_rpt" name="password_rpt" placeholder="Повторите новый пароль">
+            <?php if(isset($errors['password_rpt'])): ?>
+                <div class="error-message"><?php echo $errors['password_rpt'] ?></div>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <button type="submit" class="btn">Сохранить изменения</button>
+    <a href="/profile" class="cancel-link">Отмена</a>
 </form>
 </body>
 </html>

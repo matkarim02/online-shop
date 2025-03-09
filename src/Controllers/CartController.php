@@ -1,5 +1,9 @@
 <?php
 
+namespace Controllers;
+use Model\Product;
+use Model\UserProduct;
+
 class CartController
 {
     public function getCart()
@@ -16,7 +20,7 @@ class CartController
 
         $userId = $_SESSION['userId'];
 
-        require_once '../Model/UserProduct.php';
+
         $userProductModel = new UserProduct();
         $userProducts = $userProductModel->getUserProductsById($userId);
 
@@ -27,7 +31,6 @@ class CartController
             foreach ($userProducts as $userProduct) {
                 $user_productId = $userProduct['product_id'];
 
-                require_once '../Model/Product.php';
                 $productModel = new Product();
                 $product = $productModel->getProductById($user_productId);
 
@@ -59,7 +62,6 @@ class CartController
         if (!empty($data['product_id'])) {
             $product_id = (int)$data['product_id'];
 
-            require_once '../Model/Product.php';
             $productModel = new Product();
             $product = $productModel->getProductById($product_id);
 
@@ -100,7 +102,6 @@ class CartController
             $product_id = $_POST['product_id'];
             $amount = $_POST['amount'];
 
-            require_once '../Model/UserProduct.php';
             $userProductModel = new UserProduct();
             $user_product = $userProductModel->getById($user_id, $product_id);
 
