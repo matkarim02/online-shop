@@ -99,7 +99,7 @@
         }
 
         .login h2, .signup h2 {
-            color: #35B729;
+            color: #4361EEFF;
             font-size: 26px;
             margin-bottom: 20px;
         }
@@ -113,7 +113,7 @@
             width: 100%;
             height: 50px;
             background-color: #f2f2f2;
-            border: 2px solid transparent;
+            border: 0.5px solid transparent;
             margin-bottom: 20px;
             font-size: 16px;
             padding: 0 10px;
@@ -123,12 +123,12 @@
 
         .login input:focus, .signup input:focus,
         .login input:hover, .signup input:hover {
-            border-color: #35B729;
-            box-shadow: 0 0 10px rgba(53, 183, 41, 0.5);
+            border-color: #4361EEFF;
+            box-shadow: 0 0 10px rgba(41, 110, 183, 0.2);
         }
 
         .login button, .signup button {
-            background-color: #35B729;
+            background-color: #4361EEFF;
             border: none;
             color: white;
             font-size: 16px;
@@ -143,7 +143,7 @@
         }
 
         .login button:hover, .signup button:hover {
-            background-color: #28a745;
+            background-color: #3245b8;
             transform: scale(1.05);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
@@ -157,7 +157,7 @@
         }
 
         .login p:hover {
-            color: #35B729;
+            color: #4361EEFF;
             text-decoration: underline;
             font-size: 16px;
             transform: scale(1.1);

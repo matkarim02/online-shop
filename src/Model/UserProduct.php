@@ -6,11 +6,11 @@ class UserProduct extends Model
 {
 
 
-    public function getUserProductsById(int $userId): array|false
+    public function getUserProductsById(int $user_id): array|false
     {
 
         $stmt = $this->pdo->prepare("SELECT * FROM user_products WHERE user_id = :userId");
-        $stmt->execute(['userId' => $userId]);
+        $stmt->execute(['userId' => $user_id]);
         $userProducts = $stmt->fetchAll();
 
         return $userProducts;
@@ -39,5 +39,11 @@ class UserProduct extends Model
 
         $stmt = $this->pdo->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES (:user_id, :product_id, :amount)");
         $stmt->execute(['user_id' => $user_id, 'product_id' => $product_id, 'amount' => $amount]);
+    }
+
+    public function deleteByUserId(int $user_id): void
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM user_products WHERE user_id = :userId");
+        $stmt->execute(['userId'=>$user_id]);
     }
 }
