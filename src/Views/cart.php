@@ -192,14 +192,14 @@
                 <p><?php echo $product['description']; ?></p>
             </div>
             <input type="number" class="quantity-input" id = "amount"  value="<?php echo $product['amount'];?>" min="1">
-            <p class="price"><?php echo $product['price']; $total = $total + $product['price']?> тг</p>
+            <p class="price"><?php echo $product['price']; $total += $product['price'] * $product['amount']?> тг</p>
             <button class="remove-btn"><i class="fas fa-trash"></i></button>
         </div>
     <?php endforeach; ?>
 
     <div class="checkout-container">
         <h3 class="total-price">Total: <?php echo $total ?></h3>
-        <button class="checkout-btn"><i class="fas fa-money-bill-wave"></i> Оформить заказ</button>
+        <button class="checkout-btn" onclick="window.location.href='/create-order'"><i class="fas fa-money-bill-wave"></i> Оформить заказ</button>
     </div>
 </div>
 </body>

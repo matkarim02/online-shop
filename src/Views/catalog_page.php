@@ -23,7 +23,7 @@
                     <?php echo $product['price'];?>
                 </div>
                 <!-- Форма теперь находится внутри карточки -->
-                <form action="/addProduct" method="POST" class="product-form">
+                <form action="/cart" method="POST" class="product-form">
                     <input id="product_id" name="product_id" value="<?php echo $product['id']; ?>" type="hidden">
 
                     <div class="form-group">

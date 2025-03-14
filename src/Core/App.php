@@ -50,21 +50,16 @@ class App
                     'method' => 'editProfile'
                 ]
             ],
-            '/addProduct' => [
+            '/cart' => [
                 'GET' => [
                     'class' => CartController::class,
-                    'method' => 'getAddProduct'
+                    'method' => 'getCart'
                 ],
                 'POST' => [
                     'class' => CartController::class,
                     'method' => 'addProduct'
                 ]
-            ],
-            '/cart' => [
-                'GET' => [
-                    'class' => CartController::class,
-                    'method' => 'getCart'
-                ]
+
             ],
             '/logout' => [
                 'GET' => [

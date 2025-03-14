@@ -126,6 +126,6 @@ class CartController
             }
         }
         header('location: /catalog');
-//        require_once './pages/add_product.php';
+
     }
 }
