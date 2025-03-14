@@ -4,6 +4,7 @@ namespace Controllers;
 use Model\Order;
 use Model\UserProduct;
 use Model\OrderProduct;
+use Model\Product;
 
 class OrderController
 {
@@ -11,25 +12,47 @@ class OrderController
     private Order $orderModel;
     private UserProduct $userProductModel;
     private OrderProduct $orderProductModel;
+    private Product $productModel;
 
     public function __construct() {
         $this->orderModel = new Order();
         $this->userProductModel = new UserProduct();
         $this->orderProductModel = new OrderProduct();
+        $this->productModel = new Product();
     }
 
 
 
     public function getCheckoutForm()
     {
-        if(session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
+//        if(session_status() !== PHP_SESSION_ACTIVE) {
+//            session_start();
+//        }
+//
+//        if(empty($_SESSION['userId'])) {
+//            header('Location: /login');
+//            exit();
+//        }
+//
+//        $user_id = $_SESSION['userId'];
+//
+//        $userProducts = $this->userProductModel->getUserProductsById($user_id);
+//
+//        if($userProducts) {
+//            $products = [];
+//            $total = 0;
+//            foreach($userProducts as $userProduct) {
+//                $product_id = $userProduct['product_id'];
+//                $product = $this->productModel->getProductById($product_id);
+//                if($product && !empty($userProduct['amount'])) {
+//                    $products[] = array_merge($userProduct, $product);
+//                }
+//
+//            }
+//        } else {
+//            header('location: /catalog');
+//        }
 
-        if(empty($_SESSION['userId'])) {
-            header('Location: /login');
-            exit();
-        }
 
         require_once "./../Views/order_form.php";
     }
@@ -103,6 +126,7 @@ class OrderController
 
         }
         require_once "./../Views/order_form.php";
+
     }
 
 

@@ -16,7 +16,7 @@ class CatalogController
         if (isset($_SESSION['userId'])) {
 
             $productModel = new Product();
-            $products = $productModel->getProduct();
+            $products = $productModel->getAllProduct();
 
 
             require_once '../Views/catalog_page.php';

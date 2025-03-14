@@ -6,7 +6,7 @@ class Product extends Model
 {
 
 
-    public function getProduct(): array|false
+    public function getAllProduct(): array|false
     {
 
         $stmt = $this->pdo->query('SELECT * FROM products');
