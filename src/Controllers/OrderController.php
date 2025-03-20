@@ -25,33 +25,35 @@ class OrderController
 
     public function getCheckoutForm()
     {
-//        if(session_status() !== PHP_SESSION_ACTIVE) {
-//            session_start();
-//        }
-//
-//        if(empty($_SESSION['userId'])) {
-//            header('Location: /login');
-//            exit();
-//        }
-//
-//        $user_id = $_SESSION['userId'];
-//
-//        $userProducts = $this->userProductModel->getUserProductsById($user_id);
-//
-//        if($userProducts) {
-//            $products = [];
-//            $total = 0;
-//            foreach($userProducts as $userProduct) {
-//                $product_id = $userProduct['product_id'];
-//                $product = $this->productModel->getProductById($product_id);
-//                if($product && !empty($userProduct['amount'])) {
-//                    $products[] = array_merge($userProduct, $product);
-//                }
-//
-//            }
-//        } else {
-//            header('location: /catalog');
-//        }
+        if(session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if(empty($_SESSION['userId'])) {
+            header('Location: /login');
+            exit();
+        }
+
+        $user_id = $_SESSION['userId'];
+
+        $userProducts = $this->userProductModel->getUserProductsById($user_id);
+
+        if($userProducts) {
+            $products = [];
+            $total = 0;
+            foreach($userProducts as $userProduct) {
+                $product_id = $userProduct['product_id'];
+                $product = $this->productModel->getProductById($product_id);
+                if($product && !empty($userProduct['amount'])) {
+                    $products[] = array_merge($userProduct, $product);
+                    $total += $product['price']*$userProduct['amount'];
+                }
+
+            }
+        } else {
+            header('location: /catalog');
+            exit();
+        }
 
 
         require_once "./../Views/order_form.php";
@@ -102,6 +104,26 @@ class OrderController
         }
 
         $errors = $this->validateCheckoutForm($_POST);
+        $user_id = $_SESSION['userId'];
+
+        $userProducts = $this->userProductModel->getUserProductsById($user_id);
+
+        if($userProducts) {
+            $products = [];
+            $total = 0;
+            foreach($userProducts as $userProduct) {
+                $product_id = $userProduct['product_id'];
+                $product = $this->productModel->getProductById($product_id);
+                if($product && !empty($userProduct['amount'])) {
+                    $products[] = array_merge($userProduct, $product);
+                    $total += $product['price']*$userProduct['amount'];
+                }
+
+            }
+        } else {
+            header('location: /catalog');
+            exit();
+        }
 
         if(empty($errors)) {
             $contactName = $_POST['name'];
@@ -126,6 +148,61 @@ class OrderController
 
         }
         require_once "./../Views/order_form.php";
+
+    }
+
+
+
+
+
+    public function getAllOrders()
+    {
+        if(session_status() !== PHP_SESSION_ACTIVE){
+            session_start();
+        }
+
+        if(!isset($_SESSION['userId'])){
+            header('Location: /login');
+            exit();
+        }
+
+        $userId = $_SESSION['userId'];
+
+        $userOrders = $this->orderModel->getAllByUserId($userId);
+
+        $newUserOrders = [];
+
+        if(!empty($userOrders)){
+            foreach($userOrders as $userOrder){
+                $orderId = $userOrder['id'];
+                $orderProducts = $this->orderProductModel->getAllByOrderId($orderId);
+
+                if(!empty($orderProducts)){
+                    $orderProductDetails = [];
+                    $sumAll = 0;
+
+                    foreach ($orderProducts as $orderProduct){
+                        $productId = $orderProduct['product_id'];
+                        $product = $this->productModel->getProductById($productId);
+                        $orderProduct['name'] = $product['name'];
+                        $orderProduct['description'] = $product['description'];
+                        $orderProduct['price'] = $product['price'];
+                        $orderProduct['image_url'] = $product['image_url'];
+
+                        $orderProduct['productTotal'] = $orderProduct['price'] * $orderProduct['amount'];
+                        $orderProductDetails[] = $orderProduct;
+                        $sumAll += $orderProduct['productTotal'];
+                    }
+
+                    $userOrder['sum_all'] = $sumAll;
+                    $userOrder['productDetails'] = $orderProductDetails;
+
+                    $newUserOrders[] = $userOrder;
+
+                }
+            }
+        }
+        require_once "./../Views/user_order_page.php";
 
     }
 

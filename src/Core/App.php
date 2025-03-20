@@ -76,6 +76,12 @@ class App
                     'class' => OrderController::class,
                     'method' => 'handleCheckout'
                 ]
+            ],
+            '/user-order' => [
+                'GET' => [
+                    'class' => OrderController::class,
+                    'method' => 'getAllOrders'
+                ]
             ]
 
         ];

@@ -1,35 +1,3 @@
-<?php
-
-if(session_status() !== PHP_SESSION_ACTIVE){
-    session_start();
-}
-
-if(empty($_SESSION['userId'])) {
-    header('Location: /login');
-    exit();
-}
-
-$user_id = $_SESSION['userId'];
-
-$userProducts = $this->userProductModel->getUserProductsById($user_id);
-
-if($userProducts) {
-    $products = [];
-    $total = 0;
-    foreach($userProducts as $userProduct) {
-        $product_id = $userProduct['product_id'];
-        $product = $this->productModel->getProductById($product_id);
-        if($product && !empty($userProduct['amount'])) {
-            $products[] = array_merge($userProduct, $product);
-        }
-
-    }
-} else {
-    header('location: /catalog');
-}
-
-?>
-
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -375,7 +343,7 @@ if($userProducts) {
                                     <div class="product-quantity"><?php echo $product['amount']?> × <?php echo $product['price']?></div>
                                 </div>
                             </div>
-                            <div class="product-price"><?php echo $product['price']; $total += $product['price']*$product['amount']?> тг</div>
+                            <div class="product-price"><?php echo $product['price']?> тг</div>
                         </li>
                     <?php endforeach; ?>
                 </ul>
