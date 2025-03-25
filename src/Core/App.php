@@ -7,94 +7,12 @@ use Controllers\UserController;
 use Controllers\OrderController;
 class App
 {
-    private array $routes = [
-            '/registration' => [
-                'GET' => [
-                    'class' => UserController::class,
-                    'method' => 'getRegistrate'
-                ],
-                'POST' => [
-                    'class' => UserController::class,
-                    'method' => 'registrate'
-                ]
-            ],
-            '/login' => [
-                'GET' => [
-                    'class' => UserController::class,
-                    'method' => 'getLogin'
-                ],
-                'POST' => [
-                    'class' => UserController::class,
-                    'method' => 'login'
-                ]
-            ],
-            '/catalog' => [
-                'GET' => [
-                    'class' => CatalogController::class,
-                    'method' => 'getCatalog'
-                ]
-            ],
-            '/profile' => [
-                'GET' => [
-                    'class' => UserController::class,
-                    'method' => 'getProfile'
-                ]
-            ],
-            '/editProfile' => [
-                'GET' => [
-                    'class' => UserController::class,
-                    'method' => 'getEditProfile'
-                ],
-                'POST' => [
-                    'class' => UserController::class,
-                    'method' => 'editProfile'
-                ]
-            ],
-            '/cart' => [
-                'GET' => [
-                    'class' => CartController::class,
-                    'method' => 'getCart'
-                ],
-                'POST' => [
-                    'class' => CartController::class,
-                    'method' => 'addProduct'
-                ]
-
-            ],
-            '/logout' => [
-                'GET' => [
-                    'class' => CartController::class,
-                    'method' => 'logout'
-                ]
-            ],
-            '/create-order' => [
-                'GET' => [
-                    'class' => OrderController::class,
-                    'method' => 'getCheckoutForm'
-                ],
-                'POST' => [
-                    'class' => OrderController::class,
-                    'method' => 'handleCheckout'
-                ]
-            ],
-            '/user-order' => [
-                'GET' => [
-                    'class' => OrderController::class,
-                    'method' => 'getAllOrders'
-                ]
-            ]
-
-        ];
+    private array $routes = [];
 
     public function run(): void
     {
         $requestUri = $_SERVER['REQUEST_URI'];
         $requestMethod = $_SERVER['REQUEST_METHOD'];
-
-
-
-
-
 
 
         if(!empty($this->routes[$requestUri])){
@@ -116,5 +34,13 @@ class App
             require_once '../Views/404.php';
         }
 
+    }
+
+    public function addRoute(string $route, string $routeMethod, string $className, string $method, ): void
+    {
+        $this->routes[$route][$routeMethod] = [
+            'class' => $className,
+            'method' => $method,
+        ];
     }
 }
