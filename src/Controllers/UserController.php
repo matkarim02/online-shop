@@ -13,6 +13,8 @@ class UserController
     {
         $this->userModel = new User();
     }
+
+
     public function getRegistrate(): void
     {
 //        session_start();
@@ -164,15 +166,15 @@ class UserController
 
             $errors = [];
 
-            if ($user === false) {
+            if (!$user) {
                 $errors['username'] = 'username or password is incorrect';
             } else {
-                $passwordDB = $user['password'];
+                $passwordDB = $user->getPassword();
                 if (password_verify($password, $passwordDB)) {
 
                     //успешный вход через сессии
                     session_start();
-                    $_SESSION['userId'] = $user['id'];
+                    $_SESSION['userId'] = $user->getId();
 
                     //успешный вход через куки
                     //setcookie('user_id', $user['id']);
@@ -237,7 +239,19 @@ class UserController
 
     public function getEditProfile()
     {
-        require_once '../Views/edit_profile_page.php';
+        if(session_status() !== PHP_SESSION_ACTIVE){
+            session_start();
+        }
+
+        if(isset($_SESSION['userId'])) {
+            $userId = $_SESSION['userId'];
+            $user = $this->userModel->getById($userId);
+
+            require_once '../Views/edit_profile_page.php';
+        } else {
+            header("Location: /login_form.php");
+        }
+
     }
 
 
@@ -270,7 +284,7 @@ class UserController
 
 
                 $userId = $_SESSION['userId'];
-                if ($user && $user['id'] !== $userId) {
+                if ($user && ($user->getId() !== $userId) ) {
                     $errors['email'] = 'Электронная почта занята';
                 }
             }
@@ -317,11 +331,11 @@ class UserController
 
 
 
-            if ($user['name'] !== $name) {
+            if ($user->getName() !== $name) {
                 $name = $_POST['name'];
                 $this->userModel->updateNameById($userId, $name);
             }
-            if ($user['email'] !== $email) {
+            if ($user->getEmail() !== $email) {
                 $email = $_POST['email'];
                 $this->userModel->updateEmailById($userId, $email);
 

@@ -186,13 +186,13 @@
 
     <?php foreach($products as $product): ?>
         <div class="cart-item">
-            <img src="<?php echo $product['image_url'];?>" alt="Продукт 1">
+            <img src="<?php echo $product->getImageUrl();?>" alt="Продукт 1">
             <div class="cart-details">
-                <h3><?php echo $product['name']; ?></h3>
-                <p><?php echo $product['description']; ?></p>
+                <h3><?php echo $product->getName(); ?></h3>
+                <p><?php echo $product->getDescription(); ?></p>
             </div>
-            <input type="number" class="quantity-input" id = "amount"  value="<?php echo $product['amount'];?>" min="1">
-            <p class="price"><?php echo $product['price']; $total += $product['price'] * $product['amount']?> тг</p>
+            <input type="number" class="quantity-input" id = "amount"  value="<?php echo $product->getAmount();?>" min="1">
+            <p class="price"><?php echo $product->getPrice(); $total += $product->getPrice() * $product->getAmount()?> тг</p>
             <button class="remove-btn"><i class="fas fa-trash"></i></button>
         </div>
     <?php endforeach; ?>

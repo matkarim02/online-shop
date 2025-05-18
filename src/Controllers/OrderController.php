@@ -42,11 +42,15 @@ class OrderController
             $products = [];
             $total = 0;
             foreach($userProducts as $userProduct) {
-                $product_id = $userProduct['product_id'];
+                $product_id = $userProduct->getProductId();
                 $product = $this->productModel->getProductById($product_id);
-                if($product && !empty($userProduct['amount'])) {
-                    $products[] = array_merge($userProduct, $product);
-                    $total += $product['price']*$userProduct['amount'];
+                if($product !== null && ($userProduct->getAmount()) !== null) {
+                    $userProduct->setName($product->getName());
+                    $userProduct->setPrice($product->getPrice());
+                    $userProduct->setImageUrl($product->getImageUrl());
+                    $userProduct->setDescription($product->getDescription());
+                    $products[] = $userProduct;
+                    $total += $product->getPrice()*$userProduct->getAmount();
                 }
 
             }
@@ -112,11 +116,15 @@ class OrderController
             $products = [];
             $total = 0;
             foreach($userProducts as $userProduct) {
-                $product_id = $userProduct['product_id'];
+                $product_id = $userProduct->getProductId();
                 $product = $this->productModel->getProductById($product_id);
-                if($product && !empty($userProduct['amount'])) {
-                    $products[] = array_merge($userProduct, $product);
-                    $total += $product['price']*$userProduct['amount'];
+                if($product !== null && ($userProduct->getAmount()) !== null) {
+                    $userProduct->setName($product->getName());
+                    $userProduct->setPrice($product->getPrice());
+                    $userProduct->setImageUrl($product->getImageUrl());
+                    $userProduct->setDescription($product->getDescription());
+                    $products[] = $userProduct;
+                    $total += $product->getPrice()*$userProduct->getAmount();
                 }
 
             }
@@ -137,8 +145,8 @@ class OrderController
             $userProducts = $this->userProductModel->getUserProductsById($user_id);
 
             foreach ($userProducts as $userProduct) {
-                $productId = $userProduct['product_id'];
-                $amount = $userProduct['amount'];
+                $productId = $userProduct->getProductId();
+                $amount = $userProduct->getAmount();
                 $this->orderProductModel->createOrderProducts($orderId, $productId, $amount);
             }
 
@@ -172,30 +180,30 @@ class OrderController
 
         $newUserOrders = [];
 
-        if(!empty($userOrders)){
+        if($userOrders !== null){
             foreach($userOrders as $userOrder){
-                $orderId = $userOrder['id'];
+                $orderId = $userOrder->getId();
                 $orderProducts = $this->orderProductModel->getAllByOrderId($orderId);
 
-                if(!empty($orderProducts)){
+                if($orderProducts !== null){
                     $orderProductDetails = [];
                     $sumAll = 0;
 
                     foreach ($orderProducts as $orderProduct){
-                        $productId = $orderProduct['product_id'];
+                        $productId = $orderProduct->getProductId();
                         $product = $this->productModel->getProductById($productId);
-                        $orderProduct['name'] = $product['name'];
-                        $orderProduct['description'] = $product['description'];
-                        $orderProduct['price'] = $product['price'];
-                        $orderProduct['image_url'] = $product['image_url'];
+                        $orderProduct->setName($product->getName());
+                        $orderProduct->setDescription($product->getDescription());
+                        $orderProduct->setPrice($product->getPrice());
+                        $orderProduct->setImageUrl($product->getImageUrl());
 
-                        $orderProduct['productTotal'] = $orderProduct['price'] * $orderProduct['amount'];
+                        $orderProduct->setProductTotal($orderProduct->getPrice() * $orderProduct->getAmount());
                         $orderProductDetails[] = $orderProduct;
-                        $sumAll += $orderProduct['productTotal'];
+                        $sumAll += $orderProduct->getProductTotal();
                     }
 
-                    $userOrder['sum_all'] = $sumAll;
-                    $userOrder['productDetails'] = $orderProductDetails;
+                    $userOrder->setSumAll($sumAll);
+                    $userOrder->setProductDetails($orderProductDetails);
 
                     $newUserOrders[] = $userOrder;
 

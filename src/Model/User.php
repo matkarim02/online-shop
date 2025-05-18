@@ -4,9 +4,12 @@
 namespace Model;
 class User extends Model
 {
+    private int $id;
+    private string $name;
+    private string $email;
+    private string $password;
 
-
-    public function getByEmail(string $email): array|false
+    public function getByEmail(string $email): self|null
     {
 
         $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = :email');
@@ -14,17 +17,34 @@ class User extends Model
 
         $result = $stmt->fetch();
 
-        return $result;
+        if ($result === false) {
+            return null;
+        }
+
+        $obj = new self();
+        $obj->id = $result['id'];
+        $obj->name = $result['name'];
+        $obj->email = $result['email'];
+        $obj->password = $result['password'];
+
+
+        return $obj;
     }
 
 
-    public function getById(int $userId): array|false
+    public function getById(int $userId): self|null
     {
 
         $stmt = $this->pdo->query("SELECT * FROM users WHERE id = $userId");
         $user = $stmt->fetch();
 
-        return $user;
+        $obj = new self();
+        $obj->id = $user['id'];
+        $obj->name = $user['name'];
+        $obj->email = $user['email'];
+        $obj->password = $user['password'];
+
+        return $obj;
     }
 
     public function insertToUsers(string $name, string $email, string $password): void
@@ -54,4 +74,26 @@ class User extends Model
         $stmt = $this->pdo->prepare("UPDATE users SET password = :password WHERE id = $userId");
         $stmt->execute([':password' => $psw]);
     }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+
 }

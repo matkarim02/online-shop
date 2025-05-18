@@ -14,17 +14,17 @@
         <?php foreach ($products as $product): ?>
             <div class="card text-center">
                 <div class="card-header">Hit!</div>
-                <img class="card-img-top" src="<?php echo $product['image_url'];?>" alt="Card image">
+                <img class="card-img-top" src="<?php echo $product->getImageUrl();?>" alt="Card image">
                 <div class="card-body">
-                    <h2 class="card-text"><?php echo $product['name'];?></h2>
-                    <h5 class="card-title"><?php echo $product['description'];?></h5>
+                    <h2 class="card-text"><?php echo $product->getName();?></h2>
+                    <h5 class="card-title"><?php echo $product->getDescription();?></h5>
                 </div>
                 <div class="card-footer">
-                    <?php echo $product['price'];?>
+                    <?php echo $product->getPrice();?>
                 </div>
                 <!-- Форма теперь находится внутри карточки -->
                 <form action="/cart" method="POST" class="product-form">
-                    <input id="product_id" name="product_id" value="<?php echo $product['id']; ?>" type="hidden">
+                    <input id="product_id" name="product_id" value="<?php echo $product->getId(); ?>" type="hidden">
 
                     <div class="form-group">
                         <label for="amount" class="form-label">Количество</label>

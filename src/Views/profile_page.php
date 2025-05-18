@@ -118,12 +118,12 @@
 <body>
 <div class="profile-container">
     <img src="https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg" alt="Фото профиля" class="profile-img">
-    <h2><?php echo $user['name']; ?></h2>
+    <h2><?php echo $user->getName(); ?></h2>
 
     <div class="profile-info">
         <div class="info-item">
             <div class="info-label">Email</div>
-            <div class="info-value"><?php echo $user['email']; ?></div>
+            <div class="info-value"><?php echo $user->getEmail() ?></div>
         </div>
         <div class="info-item">
             <div class="info-label">Статус</div>

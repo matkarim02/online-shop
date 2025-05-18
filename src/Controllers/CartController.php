@@ -6,8 +6,8 @@ use Model\UserProduct;
 
 class CartController
 {
-    private $userProductModel;
-    private $productModel;
+    private  UserProduct $userProductModel;
+    private Product $productModel;
 
     public function __construct()
     {
@@ -34,17 +34,21 @@ class CartController
         $userProducts = $this->userProductModel->getUserProductsById($userId);
 
 
-        if ($userProducts) {
+        if ($userProducts !== null) {
             $products = [];
             $total = 0;
             foreach ($userProducts as $userProduct) {
-                $user_productId = $userProduct['product_id'];
+                $user_productId = $userProduct->getProductId();
 
 
                 $product = $this->productModel->getProductById($user_productId);
 
-                if ($product && !empty($userProduct['amount'])) {
-                    $products[] = array_merge($userProduct, $product);
+                if ($product !== null && ($userProduct->getAmount()) !== null) {
+                    $userProduct->setName($product->getName());
+                    $userProduct->setDescription($product->getDescription());
+                    $userProduct->setPrice($product->getPrice());
+                    $userProduct->setImageUrl($product->getImageUrl());
+                    $products[] = $userProduct;
 
                 }
             }
@@ -115,7 +119,7 @@ class CartController
             $user_product = $this->userProductModel->getById($user_id, $product_id);
 
             if ($user_product) {
-                $amount = $user_product['amount'] + $amount;
+                $amount = $user_product->getAmount() + $amount;
 
                 $this->userProductModel->updateAmountById($user_id, $product_id, $amount);
 

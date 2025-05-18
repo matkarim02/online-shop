@@ -1,22 +1,3 @@
-<?php
-use Model\User;
-if(session_status() !== PHP_SESSION_ACTIVE){
-    session_start();
-}
-
-if(isset($_SESSION['userId'])) {
-    $userId = $_SESSION['userId'];
-
-    $userModel = new User();
-    $user = $userModel->getById($userId);
-} else {
-    header("Location: /login_form.php");
-}
-
-
-?>
-
-
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -221,7 +202,7 @@ if(isset($_SESSION['userId'])) {
     <div class="form-section">
         <div class="form-group">
             <label for="name">Имя</label>
-            <input type="text" id="name" name="name" value="<?php echo ($user['name']); ?>" >
+            <input type="text" id="name" name="name" value="<?php echo ($user->getName()); ?>" >
             <?php if(isset($errors['name'])): ?>
                 <div class="error-message"><?php echo $errors['name'] ?></div>
             <?php endif; ?>
@@ -229,7 +210,7 @@ if(isset($_SESSION['userId'])) {
 
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="<?php echo ($user['email']); ?>" >
+            <input type="email" id="email" name="email" value="<?php echo ($user->getEmail()); ?>" >
             <?php if(isset($errors['email'])): ?>
                 <div class="error-message"><?php echo $errors['email'] ?></div>
             <?php endif; ?>

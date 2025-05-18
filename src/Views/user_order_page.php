@@ -481,7 +481,7 @@
         <?php foreach ($newUserOrders as $newUserOrder):?>
             <!-- Заказ 1 -->
             <section class="order-section">
-                <div class="order-number">Заказ <?php echo $newUserOrder['id'] ?> </div>
+                <div class="order-number">Заказ <?php echo $newUserOrder->getId() ?> </div>
                 <div class="card">
                     <div class="card-header">
                         <div class="card-header-gradient"></div>
@@ -494,7 +494,7 @@
                             </div>
                             <div class="order-total">
                                 <span class="order-total-label">Сумма:</span>
-                                <span class="order-total-value"> <?php echo $newUserOrder['sum_all'] ?> ₽</span>
+                                <span class="order-total-value"> <?php echo $newUserOrder->getSumAll() ?> ₽</span>
                             </div>
                         </div>
                     </div>
@@ -507,19 +507,19 @@
                             <div class="info-grid">
                                 <div class="info-item">
                                     <i class="fas fa-user"></i>
-                                    <span><?php echo $newUserOrder['contact_name']?></span>
+                                    <span><?php echo $newUserOrder->getContactName()?></span>
                                 </div>
                                 <div class="info-item">
                                     <i class="fas fa-phone"></i>
-                                    <span><?php echo $newUserOrder['contact_phone']?></span>
+                                    <span><?php echo $newUserOrder->getContactPhone()?></span>
                                 </div>
                                 <div class="info-item full-width">
                                     <i class="fas fa-map-marker-alt"></i>
-                                    <span><?php echo $newUserOrder['address']?></span>
+                                    <span><?php echo $newUserOrder->getAddress()?></span>
                                 </div>
                                 <div class="info-item full-width">
                                     <i class="fas fa-comment"></i>
-                                    <span><?php echo $newUserOrder['comment']?></span>
+                                    <span><?php echo $newUserOrder->getComment()?></span>
                                 </div>
                             </div>
                         </div>
@@ -529,22 +529,22 @@
                                 Товары в заказе
                             </h3>
                             <div class="products-list">
-                                <?php foreach ($newUserOrder['productDetails'] as $productDetail): ?>
+                                <?php foreach ($newUserOrder->getProductDetails() as $productDetail): ?>
                                     <div class="product-card">
                                         <div class="product-content">
                                             <div class="product-image-container">
-                                                <img src="<?php echo $productDetail['image_url'] ?>" alt="Смартфон Galaxy S23" class="product-image">
+                                                <img src="<?php echo $productDetail->getImageUrl() ?>" alt="Смартфон Galaxy S23" class="product-image">
                                                 <div class="product-image-overlay"></div>
                                             </div>
                                             <div class="product-details">
-                                                <h4 class="product-name"><?php echo $productDetail['name'] ?></h4>
-                                                <p class="product-description"><?php echo $productDetail['description'] ?></p>
+                                                <h4 class="product-name"><?php echo $productDetail->getName() ?></h4>
+                                                <p class="product-description"><?php echo $productDetail->getDescription() ?></p>
                                                 <div class="product-price-row">
                                                     <div class="product-price-info">
-                                                        <?php echo $productDetail['price'] ?> ₽ × <?php echo $productDetail['amount'] ?> шт.
+                                                        <?php echo $productDetail->getPrice() ?> ₽ × <?php echo $productDetail->getAmount() ?> шт.
                                                     </div>
                                                     <div class="product-total-price">
-                                                        <?php echo $productDetail['productTotal'] ?>  ₽
+                                                        <?php echo $productDetail->getProductTotal() ?>  ₽
                                                     </div>
                                                 </div>
                                             </div>
@@ -561,7 +561,7 @@
                     <div class="card-footer">
                         <div class="total-container">
                             <span class="total-label">Итого:</span>
-                            <span class="total-value"><?php echo $newUserOrder['sum_all'] ?> ₽</span>
+                            <span class="total-value"><?php echo $newUserOrder->getSumALl() ?> ₽</span>
                         </div>
                     </div>
                 </div>
