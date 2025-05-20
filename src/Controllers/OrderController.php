@@ -38,17 +38,14 @@ class OrderController
 
         $userProducts = $this->userProductModel->getUserProductsById($user_id);
 
-        if($userProducts) {
+        if($userProducts !== null) {
             $products = [];
             $total = 0;
             foreach($userProducts as $userProduct) {
                 $product_id = $userProduct->getProductId();
                 $product = $this->productModel->getProductById($product_id);
                 if($product !== null && ($userProduct->getAmount()) !== null) {
-                    $userProduct->setName($product->getName());
-                    $userProduct->setPrice($product->getPrice());
-                    $userProduct->setImageUrl($product->getImageUrl());
-                    $userProduct->setDescription($product->getDescription());
+                    $userProduct->setProduct($product);
                     $products[] = $userProduct;
                     $total += $product->getPrice()*$userProduct->getAmount();
                 }
@@ -112,17 +109,14 @@ class OrderController
 
         $userProducts = $this->userProductModel->getUserProductsById($user_id);
 
-        if($userProducts) {
+        if($userProducts !== null) {
             $products = [];
             $total = 0;
             foreach($userProducts as $userProduct) {
                 $product_id = $userProduct->getProductId();
                 $product = $this->productModel->getProductById($product_id);
                 if($product !== null && ($userProduct->getAmount()) !== null) {
-                    $userProduct->setName($product->getName());
-                    $userProduct->setPrice($product->getPrice());
-                    $userProduct->setImageUrl($product->getImageUrl());
-                    $userProduct->setDescription($product->getDescription());
+                    $userProduct->setProduct($product);
                     $products[] = $userProduct;
                     $total += $product->getPrice()*$userProduct->getAmount();
                 }
@@ -180,7 +174,7 @@ class OrderController
 
         $newUserOrders = [];
 
-        if($userOrders !== null){
+        if($userOrders){
             foreach($userOrders as $userOrder){
                 $orderId = $userOrder->getId();
                 $orderProducts = $this->orderProductModel->getAllByOrderId($orderId);
@@ -192,12 +186,9 @@ class OrderController
                     foreach ($orderProducts as $orderProduct){
                         $productId = $orderProduct->getProductId();
                         $product = $this->productModel->getProductById($productId);
-                        $orderProduct->setName($product->getName());
-                        $orderProduct->setDescription($product->getDescription());
-                        $orderProduct->setPrice($product->getPrice());
-                        $orderProduct->setImageUrl($product->getImageUrl());
+                        $orderProduct->setProduct($product);
 
-                        $orderProduct->setProductTotal($orderProduct->getPrice() * $orderProduct->getAmount());
+                        $orderProduct->setProductTotal($orderProduct->getProduct()->getPrice() * $orderProduct->getAmount());
                         $orderProductDetails[] = $orderProduct;
                         $sumAll += $orderProduct->getProductTotal();
                     }
@@ -209,6 +200,8 @@ class OrderController
 
                 }
             }
+        } else {
+            header('Location: /catalog');
         }
         require_once "./../Views/user_order_page.php";
 

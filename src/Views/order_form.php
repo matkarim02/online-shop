@@ -336,14 +336,14 @@
                         <li class="product-item">
                             <div class="product-info">
                                 <div class="product-thumbnail">
-                                    <img src="<?php echo $product->getImageUrl()?>" alt="Cтул">
+                                    <img src="<?php echo $product->getProduct()->getImageUrl()?>" alt="Cтул">
                                 </div>
                                 <div class="product-details">
-                                    <h3><?php echo $product->getName()?></h3>
-                                    <div class="product-quantity"><?php echo $product->getAmount()?> × <?php echo $product->getPrice()?></div>
+                                    <h3><?php echo $product->getProduct()->getName()?></h3>
+                                    <div class="product-quantity"><?php echo $product->getAmount()?> × <?php echo $product->getProduct()->getPrice()?></div>
                                 </div>
                             </div>
-                            <div class="product-price"><?php echo $product->getPrice()?> тг</div>
+                            <div class="product-price"><?php echo $product->getProduct()->getPrice()?> тг</div>
                         </li>
                     <?php endforeach; ?>
                 </ul>

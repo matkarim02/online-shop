@@ -166,7 +166,7 @@ class UserController
 
             $errors = [];
 
-            if (!$user) {
+            if ($user === null) {
                 $errors['username'] = 'username or password is incorrect';
             } else {
                 $passwordDB = $user->getPassword();
@@ -250,6 +250,7 @@ class UserController
             require_once '../Views/edit_profile_page.php';
         } else {
             header("Location: /login_form.php");
+            exit();
         }
 
     }
@@ -284,7 +285,7 @@ class UserController
 
 
                 $userId = $_SESSION['userId'];
-                if ($user && ($user->getId() !== $userId) ) {
+                if (($user !== null) && ($user->getId() !== $userId) ) {
                     $errors['email'] = 'Электронная почта занята';
                 }
             }
@@ -318,18 +319,14 @@ class UserController
 
 
         $errors = $this->validateEditProfile($_POST);
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $userId = $_SESSION['userId'];
+
+        $user = $this->userModel->getById($userId);
 
 
         if (empty($errors)) {
-
-            $name = $_POST['name'];
-            $email = $_POST['email'];
-            $userId = $_SESSION['userId'];
-
-
-            $user = $this->userModel->getById($userId);
-
-
 
             if ($user->getName() !== $name) {
                 $name = $_POST['name'];

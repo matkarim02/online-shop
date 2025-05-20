@@ -38,6 +38,10 @@ class User extends Model
         $stmt = $this->pdo->query("SELECT * FROM users WHERE id = $userId");
         $user = $stmt->fetch();
 
+        if ($user === false) {
+            return null;
+        }
+
         $obj = new self();
         $obj->id = $user['id'];
         $obj->name = $user['name'];

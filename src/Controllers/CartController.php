@@ -44,10 +44,7 @@ class CartController
                 $product = $this->productModel->getProductById($user_productId);
 
                 if ($product !== null && ($userProduct->getAmount()) !== null) {
-                    $userProduct->setName($product->getName());
-                    $userProduct->setDescription($product->getDescription());
-                    $userProduct->setPrice($product->getPrice());
-                    $userProduct->setImageUrl($product->getImageUrl());
+                    $userProduct->setProduct($product);
                     $products[] = $userProduct;
 
                 }
@@ -118,7 +115,7 @@ class CartController
 
             $user_product = $this->userProductModel->getById($user_id, $product_id);
 
-            if ($user_product) {
+            if ($user_product !== null) {
                 $amount = $user_product->getAmount() + $amount;
 
                 $this->userProductModel->updateAmountById($user_id, $product_id, $amount);

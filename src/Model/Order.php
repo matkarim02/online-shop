@@ -40,7 +40,7 @@ class Order extends Model
         $stmt->execute([':user_id' => $user_id]);
         $userOrders = $stmt->fetchAll();
 
-        if ($userOrders === false) {
+        if (empty($userOrders)) {
             return null;
         }
         $newUserOrders = [];

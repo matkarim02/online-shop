@@ -10,10 +10,7 @@ class UserProduct extends Model
     private int $product_id;
     private float $amount;
 
-    private string $name;
-    private string $description;
-    private float $price;
-    private string $image_url;
+    private Product $product;
 
     public function getUserProductsById(int $user_id): array|null
     {
@@ -22,7 +19,7 @@ class UserProduct extends Model
         $stmt->execute(['userId' => $user_id]);
         $userProducts = $stmt->fetchAll();
 
-        if($userProducts === false){
+        if(empty($userProducts)){
             return null;
         }
         $newUserProducts = [];
@@ -79,45 +76,18 @@ class UserProduct extends Model
         return $this->amount;
     }
 
-    public function getName(): string
+    public function getProduct(): Product
     {
-        return $this->name;
+        return $this->product;
     }
 
-    public function setName(string $name): void
+    public function setProduct(Product $product): void
     {
-        $this->name = $name;
+        $this->product = $product;
     }
 
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
 
-    public function setDescription(string $description): void
-    {
-        $this->description = $description;
-    }
 
-    public function getPrice(): float
-    {
-        return $this->price;
-    }
-
-    public function setPrice(float $price): void
-    {
-        $this->price = $price;
-    }
-
-    public function getImageUrl(): string
-    {
-        return $this->image_url;
-    }
-
-    public function setImageUrl(string $image_url): void
-    {
-        $this->image_url = $image_url;
-    }
 
 
 

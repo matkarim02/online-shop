@@ -5,21 +5,9 @@ use Controllers\CatalogController;
 use Controllers\OrderController;
 use Controllers\UserController;
 
-$autoloader = function (string $className){
-    $path = "./../" . str_replace("\\", "/", $className) . ".php";
-    if(file_exists($path)){
-        require_once $path;
-        return true;
-    }
-    return false;
-};
-
-
-
-
-
-
-spl_autoload_register($autoloader);
+require_once './../Core/Autoloader.php';
+$path = dirname(__DIR__);
+\Core\Autoloader::register($path);
 
 
 

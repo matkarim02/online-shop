@@ -18,7 +18,7 @@ class Product extends Model
         $stmt = $this->pdo->query('SELECT * FROM products');
         $products = $stmt->fetchAll();
 
-        if($products === false){
+        if(empty($products)){
             return null;
         }
 

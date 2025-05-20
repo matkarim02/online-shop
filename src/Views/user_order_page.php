@@ -533,15 +533,15 @@
                                     <div class="product-card">
                                         <div class="product-content">
                                             <div class="product-image-container">
-                                                <img src="<?php echo $productDetail->getImageUrl() ?>" alt="Смартфон Galaxy S23" class="product-image">
+                                                <img src="<?php echo $productDetail->getProduct()->getImageUrl() ?>" alt="Смартфон Galaxy S23" class="product-image">
                                                 <div class="product-image-overlay"></div>
                                             </div>
                                             <div class="product-details">
-                                                <h4 class="product-name"><?php echo $productDetail->getName() ?></h4>
-                                                <p class="product-description"><?php echo $productDetail->getDescription() ?></p>
+                                                <h4 class="product-name"><?php echo $productDetail->getProduct()->getName() ?></h4>
+                                                <p class="product-description"><?php echo $productDetail->getProduct()->getDescription() ?></p>
                                                 <div class="product-price-row">
                                                     <div class="product-price-info">
-                                                        <?php echo $productDetail->getPrice() ?> ₽ × <?php echo $productDetail->getAmount() ?> шт.
+                                                        <?php echo $productDetail->getProduct()->getPrice() ?> ₽ × <?php echo $productDetail->getAmount() ?> шт.
                                                     </div>
                                                     <div class="product-total-price">
                                                         <?php echo $productDetail->getProductTotal() ?>  ₽

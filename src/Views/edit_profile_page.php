@@ -202,7 +202,7 @@
     <div class="form-section">
         <div class="form-group">
             <label for="name">Имя</label>
-            <input type="text" id="name" name="name" value="<?php echo ($user->getName()); ?>" >
+            <input type="text" id="name" name="name" value="<?php echo $user->getName(); ?>" >
             <?php if(isset($errors['name'])): ?>
                 <div class="error-message"><?php echo $errors['name'] ?></div>
             <?php endif; ?>
@@ -210,7 +210,7 @@
 
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="<?php echo ($user->getEmail()); ?>" >
+            <input type="email" id="email" name="email" value="<?php echo $user->getEmail(); ?>" >
             <?php if(isset($errors['email'])): ?>
                 <div class="error-message"><?php echo $errors['email'] ?></div>
             <?php endif; ?>
