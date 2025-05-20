@@ -14,28 +14,37 @@ $path = dirname(__DIR__);
 //require_once "../Core/App.php";
 $app = new Core\App();
 
-$app->addRoute('/registration', 'GET', UserController::class, 'getRegistrate');
-$app->addRoute('/registration', 'POST', UserController::class, 'registrate');
+// Регистрация
+$app->get('/registration', UserController::class, 'getRegistrate');
+$app->post('/registration', UserController::class, 'registrate');
 
-$app->addRoute('/login', 'GET', UserController::class, 'getLogin');
-$app->addRoute('/login', 'POST', UserController::class, 'login');
+// Авторизация
+$app->get('/login', UserController::class, 'getLogin');
+$app->post('/login', UserController::class, 'login');
 
-$app->addRoute('/catalog', 'GET', CatalogController::class, 'getCatalog');
+// Каталог
+$app->get('/catalog', CatalogController::class, 'getCatalog');
 
-$app->addRoute('/profile', 'GET', UserController::class, 'getProfile');
+// Профиль
+$app->get('/profile', UserController::class, 'getProfile');
 
-$app->addRoute('/editProfile', 'GET', UserController::class, 'getEditProfile');
-$app->addRoute('/editProfile', 'POST', UserController::class, 'editProfile');
+// Редактирование профиля
+$app->get('/editProfile', UserController::class, 'getEditProfile');
+$app->post('/editProfile', UserController::class, 'editProfile');
 
-$app->addRoute('/cart', 'GET', CartController::class, 'getCart');
-$app->addRoute('/cart', 'POST', CartController::class, 'addProduct');
+// Корзина
+$app->get('/cart', CartController::class, 'getCart');
+$app->post('/cart', CartController::class, 'addProduct');
 
-$app->addRoute('/logout', 'GET', CartController::class, 'logout');
+// Выход
+$app->get('/logout', CartController::class, 'logout');
 
-$app->addRoute('/create-order', 'GET', OrderController::class, 'getCheckoutForm');
-$app->addRoute('/create-order', 'POST', OrderController::class, 'handleCheckout');
+// Заказ
+$app->get('/create-order', OrderController::class, 'getCheckoutForm');
+$app->post('/create-order', OrderController::class, 'handleCheckout');
 
-$app->addRoute('/user-order', 'GET', OrderController::class, 'getAllOrders');
+// Заказы пользователя
+$app->get('/user-order', OrderController::class, 'getAllOrders');
 
 
 $app->run();
