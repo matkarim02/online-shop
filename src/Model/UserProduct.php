@@ -76,6 +76,11 @@ class UserProduct extends Model
         return $this->amount;
     }
 
+    public function setAmount(float $amount): void
+    {
+        $this->amount = $amount;
+    }
+
     public function getProduct(): Product
     {
         return $this->product;
@@ -116,5 +121,10 @@ class UserProduct extends Model
     {
         $stmt = $this->pdo->prepare("DELETE FROM user_products WHERE user_id = :userId");
         $stmt->execute(['userId'=>$user_id]);
+    }
+    public function deleteByUserIdProductId(int $user_id, int $product_id): void
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM user_products WHERE user_id = :userId AND product_id = :product_id");
+        $stmt->execute(['userId'=>$user_id, 'product_id'=>$product_id]);
     }
 }

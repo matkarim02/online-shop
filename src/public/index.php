@@ -34,7 +34,8 @@ $app->post('/editProfile', UserController::class, 'editProfile');
 
 // Корзина
 $app->get('/cart', CartController::class, 'getCart');
-$app->post('/cart', CartController::class, 'addProduct');
+$app->post('/cart-increase', CartController::class, 'addProduct');
+$app->post('/cart-decrease', CartController::class, 'decreaseProduct');
 
 // Выход
 $app->get('/logout', CartController::class, 'logout');

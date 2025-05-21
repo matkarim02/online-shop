@@ -11,6 +11,8 @@ class Product extends Model
     private float $price;
     private string $image_url;
 
+    private UserProduct $user_product;
+
 
     public function getAllProduct(): array|null
     {
@@ -82,6 +84,18 @@ class Product extends Model
     {
         return $this->name;
     }
+
+    public function getUserProduct(): UserProduct
+    {
+        return $this->user_product;
+    }
+
+    public function setUserProduct(UserProduct $user_product): void
+    {
+        $this->user_product = $user_product;
+    }
+
+
 
 
 

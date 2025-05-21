@@ -2,27 +2,47 @@
 
 namespace Controllers;
 use Model\Product;
+use Model\UserProduct;
 
 class CatalogController
 {
+    private Product $productModel;
+    private UserProduct $userProductModel;
+
+    public function __construct()
+    {
+        $this->productModel = new Product();
+        $this->userProductModel = new UserProduct();
+    }
+
     public function getCatalog()
     {
-        session_start();
-
-//if(!isset($_COOKIE['user_id'])) {
-//    header("Location: /login_form.php");
-//}
-
-        if (isset($_SESSION['userId'])) {
-
-            $productModel = new Product();
-            $products = $productModel->getAllProduct();
-
-
-            require_once '../Views/catalog_page.php';
-
-        } else {
-            header("Location: /login");
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
         }
+
+        if (!isset($_SESSION['userId'])) {
+            header('location: /login');
+            exit();
+        }
+        $user_id = $_SESSION['userId'];
+        $products = $this->productModel->getAllProduct();
+
+
+        if($products !== null){
+            $newProducts = [];
+            foreach ($products as $product)
+            {
+                $user_product = $this->userProductModel->getById($user_id, $product->getId());
+                if($user_product === null) {
+                    $user_product = new UserProduct();
+                    $user_product->setAmount(0);
+                }
+                $product->setUserProduct($user_product);
+                $newProducts[] = $product;
+            }
+        }
+        require_once '../Views/catalog_page.php';
+
     }
 }

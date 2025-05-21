@@ -129,4 +129,35 @@ class CartController
         header('location: /catalog');
 
     }
+
+
+    public function decreaseProduct()
+    {
+        if(session_status() !== PHP_SESSION_ACTIVE){
+            session_start();
+        }
+
+        if(!isset($_SESSION['userId'])){
+            header("Location: /login");
+            exit();
+        }
+
+        $user_id = $_SESSION['userId'];
+        $product_id = $_POST['product_id'];
+        $amount = $_POST['amount'];
+
+        $user_product = $this->userProductModel->getById($user_id, $product_id);
+
+        if($user_product !== null){
+            if($user_product->getAmount() == 1){
+                $this->userProductModel->deleteByUserIdProductId($user_id, $product_id);
+            }
+            $amount = $user_product->getAmount() - $amount;
+
+            $this->userProductModel->updateAmountById($user_id, $product_id, $amount);
+        }
+
+        header("Location: /catalog");
+
+    }
 }
