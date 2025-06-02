@@ -38,7 +38,7 @@ $app->post('/cart-increase', CartController::class, 'addProduct');
 $app->post('/cart-decrease', CartController::class, 'decreaseProduct');
 
 // Выход
-$app->get('/logout', CartController::class, 'logout');
+$app->get('/logout', UserController::class, 'logout');
 
 // Заказ
 $app->get('/create-order', OrderController::class, 'getCheckoutForm');

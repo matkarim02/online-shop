@@ -6,7 +6,7 @@ use Model\UserProduct;
 use Model\OrderProduct;
 use Model\Product;
 
-class OrderController
+class OrderController extends BaseController
 {
 
     private Order $orderModel;
@@ -15,6 +15,7 @@ class OrderController
     private Product $productModel;
 
     public function __construct() {
+        parent::__construct();
         $this->orderModel = new Order();
         $this->userProductModel = new UserProduct();
         $this->orderProductModel = new OrderProduct();
@@ -25,18 +26,16 @@ class OrderController
 
     public function getCheckoutForm()
     {
-        if(session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
 
-        if(empty($_SESSION['userId'])) {
+
+        if(!$this->authService->check()) {
             header('Location: /login');
             exit();
         }
 
-        $user_id = $_SESSION['userId'];
+        $user = $this->authService->getUser();
 
-        $userProducts = $this->userProductModel->getUserProductsById($user_id);
+        $userProducts = $this->userProductModel->getUserProductsById($user->getId());
 
         if($userProducts !== null) {
             $products = [];
@@ -95,19 +94,18 @@ class OrderController
 
     public function handleCheckout()
     {
-        if(session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
 
-        if(empty($_SESSION['userId'])) {
+
+        if(!$this->authService->check()) {
             header('Location: /login');
             exit();
         }
 
         $errors = $this->validateCheckoutForm($_POST);
-        $user_id = $_SESSION['userId'];
 
-        $userProducts = $this->userProductModel->getUserProductsById($user_id);
+        $user = $this->authService->getUser();
+
+        $userProducts = $this->userProductModel->getUserProductsById($user->getId());
 
         if($userProducts !== null) {
             $products = [];
@@ -159,18 +157,15 @@ class OrderController
 
     public function getAllOrders()
     {
-        if(session_status() !== PHP_SESSION_ACTIVE){
-            session_start();
-        }
 
-        if(!isset($_SESSION['userId'])){
+        if(!$this->check()){
             header('Location: /login');
             exit();
         }
 
-        $userId = $_SESSION['userId'];
+        $user = $this->authService->getUser();
 
-        $userOrders = $this->orderModel->getAllByUserId($userId);
+        $userOrders = $this->orderModel->getAllByUserId($user->getId());
 
         $newUserOrders = [];
 

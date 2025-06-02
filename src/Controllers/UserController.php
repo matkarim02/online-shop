@@ -4,15 +4,9 @@ namespace Controllers;
 
 use Model\User;
 
-class UserController
+class UserController extends BaseController
 {
 
-    private User $userModel;
-
-    public function __construct()
-    {
-        $this->userModel = new User();
-    }
 
 
     public function getRegistrate(): void
@@ -152,38 +146,21 @@ class UserController
 
     public function login()
     {
-        $errors = $this->validateLogin($_POST);
+        $data = $_POST;
+        $errors = $this->validateLogin($data);
+
 
         if (empty($errors)) {
 
-            $username = $_POST['username'];
-            $password = $_POST['password'];
-
-
-
-
-            $user = $this->userModel->getByEmail($username);
-
             $errors = [];
 
-            if ($user === null) {
-                $errors['username'] = 'username or password is incorrect';
+            $result_auth = $this->authService->auth($data['username'], $data['password']);
+
+            if ($result_auth) {
+                header("Location: /catalog");
+                exit();
             } else {
-                $passwordDB = $user->getPassword();
-                if (password_verify($password, $passwordDB)) {
-
-                    //успешный вход через сессии
-                    session_start();
-                    $_SESSION['userId'] = $user->getId();
-
-                    //успешный вход через куки
-                    //setcookie('user_id', $user['id']);
-                    header("Location: /catalog");
-
-
-                } else {
-                    $errors['username'] = 'username or password is incorrect';
-                }
+                $errors['username'] = 'username or password is incorrect';
             }
 
         }
@@ -198,12 +175,10 @@ class UserController
     {
         session_start();
 
-        if (isset($_SESSION['userId'])) {
-            $userId = $_SESSION['userId'];
+        if ($this->authService->check()) {
 
 
-
-            $user = $this->userModel->getById($userId);
+            $user = $this->authService->getUser();
 
             require_once '../Views/profile_page.php';
         } else {
@@ -217,13 +192,9 @@ class UserController
 
 
     //-----------LOGOUT-------------
-    public function logout(){
-        if(session_status() !== PHP_SESSION_ACTIVE){
-            session_start();
-        }
-
-        $_SESSION = [];
-        session_destroy();
+    public function logout()
+    {
+        parent::logout();
         header("Location: /login");
         exit();
     }
@@ -239,13 +210,11 @@ class UserController
 
     public function getEditProfile()
     {
-        if(session_status() !== PHP_SESSION_ACTIVE){
-            session_start();
-        }
 
-        if(isset($_SESSION['userId'])) {
-            $userId = $_SESSION['userId'];
-            $user = $this->userModel->getById($userId);
+
+        if($this->authService->check()) {
+
+            $user = $this->authService->getUser();
 
             require_once '../Views/edit_profile_page.php';
         } else {
@@ -284,8 +253,8 @@ class UserController
                 $user = $this->userModel->getByEmail($email);
 
 
-                $userId = $_SESSION['userId'];
-                if (($user !== null) && ($user->getId() !== $userId) ) {
+                $userCurrent = $this->authService->getUser();
+                if (($user !== null) && ($user->getId() !== $userCurrent->getId()) ) {
                     $errors['email'] = 'Электронная почта занята';
                 }
             }
@@ -308,11 +277,8 @@ class UserController
 
     public function editProfile()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
 
-        if (!isset($_SESSION['userId'])) {
+        if (!$this->authService->check()) {
             header("Location: /login");
             exit();
         }
@@ -321,26 +287,26 @@ class UserController
         $errors = $this->validateEditProfile($_POST);
         $name = $_POST['name'];
         $email = $_POST['email'];
-        $userId = $_SESSION['userId'];
 
-        $user = $this->userModel->getById($userId);
+
+        $user = $this->authService->getUser();
 
 
         if (empty($errors)) {
 
             if ($user->getName() !== $name) {
                 $name = $_POST['name'];
-                $this->userModel->updateNameById($userId, $name);
+                $this->userModel->updateNameById($user->getId(), $name);
             }
             if ($user->getEmail() !== $email) {
                 $email = $_POST['email'];
-                $this->userModel->updateEmailById($userId, $email);
+                $this->userModel->updateEmailById($user->getId(), $email);
 
             }
             if (isset($_POST['password'])) {
                 $psw = $_POST['password'];
                 $psw = password_hash($psw, PASSWORD_DEFAULT);
-                $this->userModel->updatePasswordById($userId, $psw);
+                $this->userModel->updatePasswordById($user->getId(), $psw);
 
             }
 
