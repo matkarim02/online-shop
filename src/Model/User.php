@@ -9,10 +9,16 @@ class User extends Model
     private string $email;
     private string $password;
 
+
+    protected function getTableName(): string
+    {
+        return 'users';
+    }
+
     public function getByEmail(string $email): self|null
     {
 
-        $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = :email');
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE email = :email");
         $stmt->execute([':email' => $email]);
 
         $result = $stmt->fetch();
@@ -35,7 +41,7 @@ class User extends Model
     public function getById(int $userId): self|null
     {
 
-        $stmt = $this->pdo->query("SELECT * FROM users WHERE id = $userId");
+        $stmt = $this->pdo->query("SELECT * FROM {$this->getTableName()} WHERE id = $userId");
         $user = $stmt->fetch();
 
         if ($user === false) {

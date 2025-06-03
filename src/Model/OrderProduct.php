@@ -15,16 +15,21 @@ class OrderProduct extends Model
     private float $product_total;
 
 
+    protected function getTableName(): string
+    {
+        return 'order_products';
+    }
+
     public function createOrderProducts(int $orderId, int $productId, int $amount):void
     {
-        $stmt = $this->pdo->prepare("INSERT INTO order_products (order_id, product_id, amount) VALUES (:orderId, :productId, :amount)");
+        $stmt = $this->pdo->prepare("INSERT INTO {$this->getTableName()} (order_id, product_id, amount) VALUES (:orderId, :productId, :amount)");
         $stmt->execute(['orderId' => $orderId, 'productId' => $productId, 'amount' => $amount]);
 
     }
 
     public function getAllByOrderId(int $orderId):array|null
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM order_products WHERE order_id = :order_id");
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE order_id = :order_id");
         $stmt->execute(['order_id' => $orderId]);
         $orderProducts = $stmt->fetchAll();
 

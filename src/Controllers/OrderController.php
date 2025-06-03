@@ -158,7 +158,7 @@ class OrderController extends BaseController
     public function getAllOrders()
     {
 
-        if(!$this->check()){
+        if(!$this->authService->check()){
             header('Location: /login');
             exit();
         }

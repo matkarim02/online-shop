@@ -12,10 +12,16 @@ class UserProduct extends Model
 
     private Product $product;
 
+
+    protected function getTableName(): string
+    {
+        return 'user_products';
+    }
+
     public function getUserProductsById(int $user_id): array|null
     {
 
-        $stmt = $this->pdo->prepare("SELECT * FROM user_products WHERE user_id = :userId");
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :userId");
         $stmt->execute(['userId' => $user_id]);
         $userProducts = $stmt->fetchAll();
 
@@ -34,7 +40,7 @@ class UserProduct extends Model
     public function getById(int $user_id, int $product_id): self|null
     {
 
-        $stmt = $this->pdo->prepare("SELECT * FROM user_products WHERE user_id = :user_id AND product_id = :product_id");
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id AND product_id = :product_id");
         $stmt->execute(['user_id' => $user_id, 'product_id' => $product_id]);
         $user_product = $stmt->fetch();
 

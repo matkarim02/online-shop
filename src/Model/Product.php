@@ -14,10 +14,15 @@ class Product extends Model
     private UserProduct $user_product;
 
 
+    protected function getTableName(): string
+    {
+        return 'products';
+    }
+
     public function getAllProduct(): array|null
     {
 
-        $stmt = $this->pdo->query('SELECT * FROM products');
+        $stmt = $this->pdo->query("SELECT * FROM {$this->getTableName()}");
         $products = $stmt->fetchAll();
 
         if(empty($products)){
@@ -35,7 +40,7 @@ class Product extends Model
     public function getProductById(int $user_productId): self|null
     {
 
-        $stmt = $this->pdo->prepare("SELECT * FROM products WHERE id = :productId");
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE id = :productId");
         $stmt->execute(['productId' => $user_productId]);
         $product = $stmt->fetch();
 
