@@ -141,6 +141,16 @@
             background-color: #fff;
         }
 
+        .go-to-cart {
+            text-align: center;
+            padding: 10px 0 20px;
+        }
+
+        .go-to-cart .form-button {
+            width: auto;
+            padding: 10px 20px;
+        }
+
         @media (max-width: 768px) {
             .card-deck {
                 flex-direction: column;
@@ -173,8 +183,6 @@
                 </div>
 
                 <div class="product-controls">
-
-
                     <form action="/cart-decrease" method="POST">
                         <input type="hidden" name="product_id" value="<?php echo $newProduct->getId(); ?>">
                         <input type="hidden" name="amount" class="amount-field" value="1">
@@ -188,7 +196,14 @@
                         <input type="hidden" name="amount" class="amount-field" value="1">
                         <button type="submit" class="form-button">+</button>
                     </form>
+                </div>
 
+                <!-- Новая форма "Перейти" -->
+                <div class="go-to-cart">
+                    <form action="/product" method="POST">
+                        <input type="hidden" name="product_id" value="<?php echo $newProduct->getId(); ?>">
+                        <button type="submit" class="form-button">Перейти</button>
+                    </form>
                 </div>
             </div>
         <?php endforeach; ?>

@@ -28,6 +28,10 @@ $app->get('/catalog', CatalogController::class, 'getCatalog');
 // Профиль
 $app->get('/profile', UserController::class, 'getProfile');
 
+// отзыв продутка
+$app->post('/product', CatalogController::class, 'getProduct' );
+$app->post('/add-review', CatalogController::class, 'addReview');
+
 // Редактирование профиля
 $app->get('/editProfile', UserController::class, 'getEditProfile');
 $app->post('/editProfile', UserController::class, 'editProfile');

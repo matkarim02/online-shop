@@ -182,8 +182,8 @@ class OrderController extends BaseController
                         $productId = $orderProduct->getProductId();
                         $product = $this->productModel->getProductById($productId);
                         $orderProduct->setProduct($product);
-
                         $orderProduct->setProductTotal($orderProduct->getProduct()->getPrice() * $orderProduct->getAmount());
+
                         $orderProductDetails[] = $orderProduct;
                         $sumAll += $orderProduct->getProductTotal();
                     }

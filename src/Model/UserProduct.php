@@ -112,25 +112,25 @@ class UserProduct extends Model
     public function updateAmountById(int $user_id, int $product_id, int $amount): void
     {
 
-        $stmt = $this->pdo->prepare("UPDATE user_products SET amount = :amount WHERE product_id = :product_id AND user_id = :user_id;");
+        $stmt = $this->pdo->prepare("UPDATE {$this->getTableName()} SET amount = :amount WHERE product_id = :product_id AND user_id = :user_id;");
         $stmt->execute(['amount' => $amount, 'product_id' => $product_id, 'user_id' => $user_id]);
     }
 
     public function setUserProduct(int $user_id, int $product_id, int $amount): void
     {
 
-        $stmt = $this->pdo->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES (:user_id, :product_id, :amount)");
+        $stmt = $this->pdo->prepare("INSERT INTO {$this->getTableName()} (user_id, product_id, amount) VALUES (:user_id, :product_id, :amount)");
         $stmt->execute(['user_id' => $user_id, 'product_id' => $product_id, 'amount' => $amount]);
     }
 
     public function deleteByUserId(int $user_id): void
     {
-        $stmt = $this->pdo->prepare("DELETE FROM user_products WHERE user_id = :userId");
+        $stmt = $this->pdo->prepare("DELETE FROM {$this->getTableName()} WHERE user_id = :userId");
         $stmt->execute(['userId'=>$user_id]);
     }
     public function deleteByUserIdProductId(int $user_id, int $product_id): void
     {
-        $stmt = $this->pdo->prepare("DELETE FROM user_products WHERE user_id = :userId AND product_id = :product_id");
+        $stmt = $this->pdo->prepare("DELETE FROM {$this->getTableName()} WHERE user_id = :userId AND product_id = :product_id");
         $stmt->execute(['userId'=>$user_id, 'product_id'=>$product_id]);
     }
 }

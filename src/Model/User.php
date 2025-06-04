@@ -60,21 +60,21 @@ class User extends Model
     public function insertToUsers(string $name, string $email, string $password): void
     {
 
-        $stmt = $this->pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
+        $stmt = $this->pdo->prepare("INSERT INTO {$this->getTableName()} (name, email, password) VALUES (:name, :email, :password)");
         $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password]);
     }
 
     public function updateNameById(int $userId, string $name): void
     {
 
-        $stmt = $this->pdo->prepare("UPDATE users SET name = :name WHERE id = $userId");
+        $stmt = $this->pdo->prepare("UPDATE {$this->getTableName()} SET name = :name WHERE id = $userId");
         $stmt->execute([':name' => $name]);
     }
 
     public function updateEmailById(int $userId, string $email): void
     {
 
-        $stmt = $this->pdo->prepare("UPDATE users SET email = :email WHERE id = $userId");
+        $stmt = $this->pdo->prepare("UPDATE {$this->getTableName()} SET email = :email WHERE id = $userId");
         $stmt->execute([':email' => $email]);
     }
 

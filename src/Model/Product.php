@@ -13,6 +13,10 @@ class Product extends Model
 
     private UserProduct $user_product;
 
+    private array $reviews = [];
+
+    private float $avg_rating = 0.0;
+
 
     protected function getTableName(): string
     {
@@ -99,6 +103,31 @@ class Product extends Model
     {
         $this->user_product = $user_product;
     }
+
+    public function getReviews(): array
+    {
+        return $this->reviews;
+    }
+
+    public function setReviews(array $reviews): void
+    {
+        $this->reviews = $reviews;
+    }
+
+    public function getAvgRating(): float
+    {
+        return $this->avg_rating;
+    }
+
+    public function setAvgRating(float $avg_rating): void
+    {
+        $this->avg_rating = $avg_rating;
+    }
+
+
+
+
+
 
 
 
