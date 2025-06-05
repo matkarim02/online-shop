@@ -5,6 +5,7 @@ use Model\Order;
 use Model\UserProduct;
 use Model\OrderProduct;
 use Model\Product;
+use Service\OrderService;
 
 class OrderController extends BaseController
 {
@@ -13,6 +14,7 @@ class OrderController extends BaseController
     private UserProduct $userProductModel;
     private OrderProduct $orderProductModel;
     private Product $productModel;
+    private OrderService $orderService;
 
     public function __construct() {
         parent::__construct();
@@ -20,6 +22,7 @@ class OrderController extends BaseController
         $this->userProductModel = new UserProduct();
         $this->orderProductModel = new OrderProduct();
         $this->productModel = new Product();
+        $this->orderService = new OrderService();
     }
 
 
@@ -132,17 +135,7 @@ class OrderController extends BaseController
             $address = $_POST['address'];
             $user_id = $_SESSION['userId'];
 
-            $orderId = $this->orderModel->createOrder($contactName, $contactPhone, $address, $comments, $user_id);
-
-            $userProducts = $this->userProductModel->getUserProductsById($user_id);
-
-            foreach ($userProducts as $userProduct) {
-                $productId = $userProduct->getProductId();
-                $amount = $userProduct->getAmount();
-                $this->orderProductModel->createOrderProducts($orderId, $productId, $amount);
-            }
-
-            $this->userProductModel->deleteByUserId($user_id);
+            $this->orderService->createOrder($contactName, $contactPhone, $address, $comments, $user_id);
 
 
 

@@ -3,17 +3,20 @@
 namespace Controllers;
 use Model\Product;
 use Model\UserProduct;
+use Service\CartService;
 
 class CartController extends BaseController
 {
     private  UserProduct $userProductModel;
     private Product $productModel;
+    private CartService $cartService;
 
     public function __construct()
     {
         parent::__construct();
         $this->userProductModel = new UserProduct();
         $this->productModel = new Product();
+        $this->cartService = new CartService();
     }
 
     public function getCart()
@@ -108,19 +111,9 @@ class CartController extends BaseController
             $product_id = $_POST['product_id'];
             $amount = $_POST['amount'];
 
+            $this->cartService->addProduct($user->getId(), $product_id, $amount);
 
-            $user_product = $this->userProductModel->getById($user->getId(), $product_id);
 
-            if ($user_product !== null) {
-                $amount = $user_product->getAmount() + $amount;
-
-                $this->userProductModel->updateAmountById($user->getId(), $product_id, $amount);
-
-            } else {
-
-                $this->userProductModel->setUserProduct($user->getId(), $product_id, $amount);
-
-            }
         }
         header('location: /catalog');
 
@@ -136,20 +129,19 @@ class CartController extends BaseController
             exit();
         }
 
-        $user = $this->authService->getUser();
-        $product_id = $_POST['product_id'];
-        $amount = $_POST['amount'];
+        $errors = $this->validateAddProduct($_POST);
 
-        $user_product = $this->userProductModel->getById($user->getId(), $product_id);
+        if(empty($errors)) {
+            $user = $this->authService->getUser();
+            $product_id = $_POST['product_id'];
+            $amount = $_POST['amount'];
 
-        if($user_product !== null){
-            if($user_product->getAmount() == 1){
-                $this->userProductModel->deleteByUserIdProductId($user->getId(), $product_id);
-            }
-            $amount = $user_product->getAmount() - $amount;
-
-            $this->userProductModel->updateAmountById($user->getId(), $product_id, $amount);
+            $this->cartService->decreaseProduct($user->getId(), $product_id, $amount);
         }
+
+
+
+
 
         header("Location: /catalog");
 

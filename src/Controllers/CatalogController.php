@@ -67,14 +67,15 @@ class CatalogController extends BaseController
             if($reviews !== null)
             {
                 $product->setReviews($reviews);
+                if ($avg_rating !== null) {
+                    $product->setAvgRating($avg_rating);
+                } else {
+                    $product->setAvgRating(0.0);
+                }
 
             }
 
-            if ($avg_rating !== null) {
-                $product->setAvgRating($avg_rating);
-            } else {
-                $product->setAvgRating(0.0);
-            }
+
 
             require_once '../Views/product_review_page.php';
         } else {
@@ -114,7 +115,7 @@ class CatalogController extends BaseController
                 if ($avg_rating !== null) {
                     $product->setAvgRating($avg_rating);
                 } else {
-                    $product->setAvgRating(0.0); // или какое значение ты хочешь по умолчанию
+                    $product->setAvgRating(0.0);
                 }
             }
 
