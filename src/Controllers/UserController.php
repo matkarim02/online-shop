@@ -2,6 +2,8 @@
 
 namespace Controllers;
 
+use DTO\AddCartDTO;
+use DTO\AuthUserDTO;
 use Model\User;
 
 class UserController extends BaseController
@@ -154,7 +156,9 @@ class UserController extends BaseController
 
             $errors = [];
 
-            $result_auth = $this->authService->auth($data['username'], $data['password']);
+            $dto = new AuthUserDTO($data['username'], $data['password']);
+
+            $result_auth = $this->authService->auth($dto);
 
             if ($result_auth) {
                 header("Location: /catalog");

@@ -1,6 +1,7 @@
 <?php
 
 namespace Controllers;
+use DTO\AddCartDTO;
 use Model\Product;
 use Model\UserProduct;
 use Service\CartService;
@@ -108,10 +109,10 @@ class CartController extends BaseController
 
         if (empty($errors)) {
             $user = $this->authService->getUser();
-            $product_id = $_POST['product_id'];
-            $amount = $_POST['amount'];
 
-            $this->cartService->addProduct($user->getId(), $product_id, $amount);
+            $dto = new AddCartDTO($_POST['product_id'], $_POST['amount'], $user);
+
+            $this->cartService->addProduct($dto);
 
 
         }
@@ -133,14 +134,11 @@ class CartController extends BaseController
 
         if(empty($errors)) {
             $user = $this->authService->getUser();
-            $product_id = $_POST['product_id'];
-            $amount = $_POST['amount'];
 
-            $this->cartService->decreaseProduct($user->getId(), $product_id, $amount);
+            $dto = new AddCartDTO($_POST['product_id'], $_POST['amount'], $user);
+
+            $this->cartService->decreaseProduct($dto);
         }
-
-
-
 
 
         header("Location: /catalog");

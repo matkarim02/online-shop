@@ -2,6 +2,7 @@
 
 namespace Service;
 
+use DTO\AddCartDTO;
 use Model\UserProduct;
 
 class CartService
@@ -15,33 +16,33 @@ class CartService
 
 
 
-    public function addProduct(int $user_id, int $product_id, int $amount):void
+    public function addProduct(AddCartDTO $data):void
     {
 
-        $user_product = $this->userProductModel->getById($user_id, $product_id);
+        $user_product = $this->userProductModel->getById($data->getUser()->getId(),$data->getProductId());
 
         if ($user_product !== null) {
-            $amount = $user_product->getAmount() + $amount;
-            $this->userProductModel->updateAmountById($user_id, $product_id, $amount);
+            $amount = $user_product->getAmount() + $data->getAmount();
+            $this->userProductModel->updateAmountById($data->getUser()->getId(),$data->getProductId(),  $amount);
         } else {
-            $this->userProductModel->setUserProduct($user_id, $product_id, $amount);
+            $this->userProductModel->setUserProduct($data->getUser()->getId(),$data->getProductId(),  $data->getAmount());
         }
 
     }
 
 
 
-    public function decreaseProduct(int $user_id, int $product_id, int $amount):void
+    public function decreaseProduct(AddCartDTO $data):void
     {
 
-        $user_product = $this->userProductModel->getById($user_id, $product_id);
+        $user_product = $this->userProductModel->getById($data->getUser()->getId(),$data->getProductId());
 
         if($user_product !== null){
             if($user_product->getAmount() == 1){
-                $this->userProductModel->deleteByUserIdProductId($user_id, $product_id);
+                $this->userProductModel->deleteByUserIdProductId($data->getUser()->getId(),$data->getProductId());
             }
-            $amount = $user_product->getAmount() - $amount;
-            $this->userProductModel->updateAmountById($user_id, $product_id, $amount);
+            $amount = $user_product->getAmount() - $data->getAmount();
+            $this->userProductModel->updateAmountById($data->getUser()->getId(),$data->getProductId(), $amount);
         }
 
     }

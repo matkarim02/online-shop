@@ -1,6 +1,7 @@
 <?php
 
 namespace Controllers;
+use DTO\OrderCreateDTO;
 use Model\Order;
 use Model\UserProduct;
 use Model\OrderProduct;
@@ -129,18 +130,21 @@ class OrderController extends BaseController
         }
 
         if(empty($errors)) {
-            $contactName = $_POST['name'];
-            $contactPhone = $_POST['phone'];
-            $comments = $_POST['comments'];
-            $address = $_POST['address'];
-            $user_id = $_SESSION['userId'];
 
-            $this->orderService->createOrder($contactName, $contactPhone, $address, $comments, $user_id);
+            $user = $this->authService->getUser();
+
+            $dto = new OrderCreateDTO($_POST['name'], $_POST['phone'], $_POST['comments'], $_POST['address'], $user);
+
+            $this->orderService->createOrder($dto);
+            header('Location: /user-order');
+            exit();
 
 
 
+        } else {
+            require_once "./../Views/order_form.php";
         }
-        require_once "./../Views/order_form.php";
+
 
     }
 

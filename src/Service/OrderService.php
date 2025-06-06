@@ -2,6 +2,7 @@
 
 namespace Service;
 
+use DTO\OrderCreateDTO;
 use Model\Order;
 use Model\OrderProduct;
 use Model\UserProduct;
@@ -19,11 +20,17 @@ class OrderService
         $this->orderProductModel = new OrderProduct();
     }
 
-    public function createOrder($contactName, $contactPhone, $address, $comments, $user_id):void
+    public function createOrder(OrderCreateDTO $data):void
     {
-        $orderId = $this->orderModel->createOrder($contactName, $contactPhone, $address, $comments, $user_id);
+        $orderId = $this->orderModel->createOrder(
+            $data->getContactName(),
+            $data->getContactPhone(),
+            $data->getAddress(),
+            $data->getComment(),
+            $data->getUser()->getId()
+        );
 
-        $userProducts = $this->userProductModel->getUserProductsById($user_id);
+        $userProducts = $this->userProductModel->getUserProductsById($data->getUser()->getId());
 
         foreach ($userProducts as $userProduct) {
             $productId = $userProduct->getProductId();
@@ -31,6 +38,6 @@ class OrderService
             $this->orderProductModel->createOrderProducts($orderId, $productId, $amount);
         }
 
-        $this->userProductModel->deleteByUserId($user_id);
+        $this->userProductModel->deleteByUserId($data->getUser()->getId());
     }
 }
