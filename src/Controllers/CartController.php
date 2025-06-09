@@ -4,6 +4,8 @@ namespace Controllers;
 use DTO\AddCartDTO;
 use Model\Product;
 use Model\UserProduct;
+use Request\AddProductRequest;
+use Request\DecreaseProductRequest;
 use Service\CartService;
 
 class CartController extends BaseController
@@ -66,36 +68,10 @@ class CartController extends BaseController
     }
 
 
-    private function validateAddProduct(array $data): array
-    {
-
-        $errors = [];
-
-        if (!empty($data['product_id'])) {
-            $product_id = (int)$data['product_id'];
 
 
-            $product = $this->productModel->getProductById($product_id);
 
-            if ($product === false) {
-                $errors['product_id'] = "Product does not exist";
-            }
-        } else {
-            $errors['product_id'] = "Product ID is required";
-        }
-
-
-        if (empty($data['amount'])) {
-            $errors['amount'] = 'Amount is required';
-        } elseif (!is_numeric($data['amount'])) {
-            $errors['amount'] = 'Amount must be numeric';
-        }
-
-        return $errors;
-    }
-
-
-    public function addProduct()
+    public function addProduct(AddProductRequest $request)
     {
 
 
@@ -105,12 +81,12 @@ class CartController extends BaseController
         }
 
 
-        $errors = $this->validateAddProduct($_POST);
+        $errors = $request->validateAddProduct();
 
         if (empty($errors)) {
             $user = $this->authService->getUser();
 
-            $dto = new AddCartDTO($_POST['product_id'], $_POST['amount'], $user);
+            $dto = new AddCartDTO($request->getProductId(), $request->getAmount(), $user);
 
             $this->cartService->addProduct($dto);
 
@@ -121,7 +97,7 @@ class CartController extends BaseController
     }
 
 
-    public function decreaseProduct()
+    public function decreaseProduct(DecreaseProductRequest $request)
     {
 
 
@@ -130,12 +106,12 @@ class CartController extends BaseController
             exit();
         }
 
-        $errors = $this->validateAddProduct($_POST);
+        $errors = $request->validateAddProduct();
 
         if(empty($errors)) {
             $user = $this->authService->getUser();
 
-            $dto = new AddCartDTO($_POST['product_id'], $_POST['amount'], $user);
+            $dto = new AddCartDTO($request->getProductId(), $request->getAmount(), $user);
 
             $this->cartService->decreaseProduct($dto);
         }

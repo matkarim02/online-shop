@@ -5,6 +5,8 @@ use Controllers\CartController;
 use Controllers\CatalogController;
 use Controllers\UserController;
 use Controllers\OrderController;
+use Request\AddProductRequest;
+
 class App
 {
     private array $routes = [];
@@ -21,10 +23,19 @@ class App
                 $handler = $routeMethods[$requestMethod];
                 $class = $handler['class'];
                 $method = $handler['method'];
-
+                $requestClass = $handler['request'];
 
                 $controller = new $class();
-                $controller->$method();
+
+                if($requestClass !== null){
+                    $request = new $requestClass($_POST);
+                    $controller->$method($request);
+                } else {
+                    $controller->$method();
+                }
+
+
+
 
             } else {
                 echo 'Invalid request method';
@@ -44,19 +55,22 @@ class App
         ];
     }
 
-    public function get(string $route, string $className, string $method): void
+    public function get(string $route, string $className, string $method, string $requestClass = null): void
     {
         $this->routes[$route]['GET'] = [
             'class' => $className,
             'method' => $method,
+            'request' => $requestClass,
+
         ];
     }
 
-    public function post(string $route, string $className, string $method): void
+    public function post(string $route, string $className, string $method, string $requestClass = null): void
     {
         $this->routes[$route]['POST'] = [
             'class' => $className,
             'method' => $method,
+            'request' => $requestClass,
         ];
     }
 }

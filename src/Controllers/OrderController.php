@@ -6,6 +6,7 @@ use Model\Order;
 use Model\UserProduct;
 use Model\OrderProduct;
 use Model\Product;
+use Request\HandleCheckoutRequest;
 use Service\OrderService;
 
 class OrderController extends BaseController
@@ -66,37 +67,11 @@ class OrderController extends BaseController
 
 
 
-    private function validateCheckoutForm(array $data): array
-    {
-        $errors = [];
-
-        if(!empty($data['name'])) {
-            $contactName = $data['name'];
-
-            if(strlen($contactName) < 2) {
-                $errors['name'] = "Имя должно содержать не менее 2 символов";
-            }
-        } else {
-            $errors['name'] = "Заполните поле";
-        }
-
-        if(!empty($data['phone'])) {
-            $contactPhone = $data['phone'];
-
-//            if(!is_numeric($contactPhone)) {
-//                $errors['phone'] = "Поле должно содержать номер";
-//            }
-        } else {
-            $errors['phone'] = "Заполните поле";
-        }
-
-        return $errors;
-    }
 
 
 
 
-    public function handleCheckout()
+    public function handleCheckout(HandleCheckoutRequest $request)
     {
 
 
@@ -105,7 +80,7 @@ class OrderController extends BaseController
             exit();
         }
 
-        $errors = $this->validateCheckoutForm($_POST);
+        $errors = $request->validateCheckoutForm();
 
         $user = $this->authService->getUser();
 
@@ -133,7 +108,13 @@ class OrderController extends BaseController
 
             $user = $this->authService->getUser();
 
-            $dto = new OrderCreateDTO($_POST['name'], $_POST['phone'], $_POST['comments'], $_POST['address'], $user);
+            $dto = new OrderCreateDTO(
+                $request->getName(),
+                $request->getPhone(),
+                $request->getComment(),
+                $request->getAddress(),
+                $user
+            );
 
             $this->orderService->createOrder($dto);
             header('Location: /user-order');

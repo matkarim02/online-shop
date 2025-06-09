@@ -5,9 +5,18 @@ namespace Controllers;
 use DTO\AddCartDTO;
 use DTO\AuthUserDTO;
 use Model\User;
+use Request\EditProfileRequest;
+use Request\LoginRequest;
+use Request\RegistrateRequest;
 
 class UserController extends BaseController
 {
+    private User $userModel;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->userModel = new User();
+    }
 
 
 
@@ -21,85 +30,23 @@ class UserController extends BaseController
     }
 
 
-    private function validateRegistrate(array $data): array
+
+
+
+    public function registrate(RegistrateRequest $request)
     {
 
-        $errors = [];
-
-
-        if (isset($data['name'])) {
-            $name = $data['name'];
-
-            if (strlen($name) < 2) {
-                $errors['name'] = 'Имя должно содержать не менее 2 символов';
-            }
-
-        } else {
-            $errors['name'] = 'Имя обязательно';
-        }
-
-
-        if (isset($data['email'])) {
-            $email = $data['email'];
-
-
-            if (strlen($email) < 2) {
-                $errors['email'] = 'Email должен содержать не менее 2 символов';
-            } elseif (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-                $errors['email'] = 'Электронная почта должна быть правильным';
-            } else {
-
-
-
-                $count_email = $this->userModel->getByEmail($email);
-
-                if ($count_email) {
-                    $errors['email'] = 'Электронная почта занята';
-                }
-            }
-
-        } else {
-            $errors['email'] = 'Электронная почта обязательна';
-        }
-
-
-        if (isset($data['psw']) && isset($data['psw_repeat'])) {
-            $password = $data['psw'];
-            $psw_repeat = $data['psw_repeat'];
-
-            if (strlen($password) < 6) {
-                $errors['psw'] = 'Пароль должен состоять не менее чем из 6 символов';
-            } elseif ($password !== $psw_repeat) {
-                $errors['psw'] = 'Пароли не совпадают';
-            }
-        } elseif (empty($data['psw'])) {
-            $errors['psw'] = 'Требуется пароль';
-        } elseif (empty($data['psw_repeat'])) {
-            $errors['psw_repeat'] = 'Необходимо повторить пароль';
-        }
-
-
-        return $errors;
-    }
-
-
-    public function registrate()
-    {
-
-        $errors = $this->validateRegistrate($_POST);
+        $errors = $request->validateRegistrate();
 
         if (empty($errors)) {
 
-            $name = $_POST['name'];
-            $email = $_POST['email'];
-            $password = $_POST['psw'];
-            $psw_repeat = $_POST['psw_repeat'];
 
-            $password = password_hash($password, PASSWORD_DEFAULT);
+
+            $password = password_hash($request->getPassword(), PASSWORD_DEFAULT);
 
 
 
-            $this->userModel->insertToUsers($name, $email, $password);
+            $this->userModel->insertToUsers($request->getName(), $request->getEmail(), $password);
 
 
 //    $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
@@ -131,32 +78,19 @@ class UserController extends BaseController
     }
 
 
-    private function validateLogin(array $data): array
-    {
-        $errors = [];
 
-        if (!isset($data['username'])) {
-            $errors['username'] = "Username is required";
-        }
 
-        if (empty($data['password'])) {
-            $errors['password'] = "Password is required";
-        }
-
-        return $errors;
-    }
-
-    public function login()
+    public function login(LoginRequest $request)
     {
         $data = $_POST;
-        $errors = $this->validateLogin($data);
+        $errors = $request->validateLogin();
 
 
         if (empty($errors)) {
 
             $errors = [];
 
-            $dto = new AuthUserDTO($data['username'], $data['password']);
+            $dto = new AuthUserDTO($request->getEmail(), $request->getPassword());
 
             $result_auth = $this->authService->auth($dto);
 
@@ -229,57 +163,10 @@ class UserController extends BaseController
     }
 
 
-    private function validateEditProfile(array $data): array
-    {
-
-        $errors = [];
-
-        if (isset($data['name'])) {
-            $name = $data['name'];
-
-            if (strlen($name) < 2) {
-                $errors['name'] = 'Имя должно содержать не менее 2 символов';
-            }
-
-        }
 
 
-        if (isset($data['email'])) {
-            $email = $data['email'];
 
-            if (strlen($email) < 2) {
-                $errors['email'] = 'Email должен содержать не менее 2 символов';
-            } elseif (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-                $errors['email'] = 'Электронная почта должна быть правильным';
-            } else {
-
-
-                $user = $this->userModel->getByEmail($email);
-
-
-                $userCurrent = $this->authService->getUser();
-                if (($user !== null) && ($user->getId() !== $userCurrent->getId()) ) {
-                    $errors['email'] = 'Электронная почта занята';
-                }
-            }
-        }
-
-
-        if (!empty($data['password']) || !empty($data['password_rpt'])) {
-            if (empty($data['password']) || empty($data['password_rpt'])) {
-                $errors['password_rpt'] = 'Необходимо повторить пароль';
-            } elseif (strlen($data['password']) < 6) {
-                $errors['password'] = 'Пароль должен содержать не менее 6 символов';
-            } elseif ($data['password'] !== $data['password_rpt']) {
-                $errors['password'] = 'Пароли не совпадают';
-            }
-        }
-
-        return $errors;
-    }
-
-
-    public function editProfile()
+    public function editProfile(EditProfileRequest $request)
     {
 
         if (!$this->authService->check()) {
@@ -288,9 +175,8 @@ class UserController extends BaseController
         }
 
 
-        $errors = $this->validateEditProfile($_POST);
-        $name = $_POST['name'];
-        $email = $_POST['email'];
+        $errors = $request->validateEditProfile();
+
 
 
         $user = $this->authService->getUser();
@@ -298,17 +184,16 @@ class UserController extends BaseController
 
         if (empty($errors)) {
 
-            if ($user->getName() !== $name) {
-                $name = $_POST['name'];
-                $this->userModel->updateNameById($user->getId(), $name);
+            if ($user->getName() !== $request->getName()) {
+                $this->userModel->updateNameById($user->getId(), $request->getName());
             }
-            if ($user->getEmail() !== $email) {
-                $email = $_POST['email'];
-                $this->userModel->updateEmailById($user->getId(), $email);
+            if ($user->getEmail() !== $request->getEmail()) {
+
+                $this->userModel->updateEmailById($user->getId(), $request->getEmail());
 
             }
-            if (isset($_POST['password'])) {
-                $psw = $_POST['password'];
+            if (!empty($request->getPassword())) {
+                $psw = $request->getPassword();
                 $psw = password_hash($psw, PASSWORD_DEFAULT);
                 $this->userModel->updatePasswordById($user->getId(), $psw);
 

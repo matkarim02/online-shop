@@ -4,6 +4,8 @@ namespace Controllers;
 use Model\Product;
 use Model\Review;
 use Model\UserProduct;
+use Request\AddReviewRequest;
+use Request\GetProductRequest;
 
 class CatalogController extends BaseController
 {
@@ -48,14 +50,14 @@ class CatalogController extends BaseController
 
     }
 
-    public function getProduct()
+    public function getProduct(GetProductRequest $request)
     {
         if(!$this->authService->check()){
             header('location: /login');
             exit();
         }
 
-        $product_id = $_POST['product_id'];
+        $product_id = $request->getProductId();
         $product = $this->productModel->getProductById($product_id);
         $reviews = $this->reviewModel->getProductReviewsByProductId($product_id);
         $avg_rating = $this->reviewModel->getAvgRatingByProductId($product_id);
@@ -87,23 +89,25 @@ class CatalogController extends BaseController
 
 
 
-    public function addReview()
+    public function addReview(AddReviewRequest $request)
     {
         if(!$this->authService->check()){
             header('location: /login');
             exit();
         }
 
-        $product_id = $_POST['product_id'];
-        $author = $_POST['author'];
-        $text = $_POST['text'];
-        $rating = $_POST['rating'];
 
-        $this->reviewModel->setProductReview($product_id, $author, $text, $rating);
 
-        $product = $this->productModel->getProductById($product_id);
-        $reviews = $this->reviewModel->getProductReviewsByProductId($product_id);
-        $avg_rating = $this->reviewModel->getAvgRatingByProductId($product_id);
+        $this->reviewModel->setProductReview(
+            $request->getProductId(),
+            $request->getAuthor(),
+            $request->getText(),
+            $request->getRating()
+        );
+
+        $product = $this->productModel->getProductById($request->getProductId());
+        $reviews = $this->reviewModel->getProductReviewsByProductId($request->getProductId());
+        $avg_rating = $this->reviewModel->getAvgRatingByProductId($request->getProductId());
 
 
 
