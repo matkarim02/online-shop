@@ -3,7 +3,7 @@
 namespace Request;
 
 use Model\User;
-use Service\AuthService;
+use Service\Auth\AuthSessionService;
 
 class EditProfileRequest
 {
@@ -57,7 +57,7 @@ class EditProfileRequest
                 $userModel = new User();
                 $user = $userModel->getByEmail($email);
 
-                $authService = new AuthService();
+                $authService = new AuthSessionService();
                 $userCurrent = $authService->getUser();
                 if (($user !== null) && ($user->getId() !== $userCurrent->getId()) ) {
                     $errors['email'] = 'Электронная почта занята';
