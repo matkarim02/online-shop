@@ -330,27 +330,29 @@
 
             <div class="order-summary">
                 <h2>Ваш заказ</h2>
+                <?php foreach ($userProducts as $userProduct): ?>
+                    <ul class="product-list">
 
-                <ul class="product-list">
-                    <?php foreach ($products as $product): ?>
                         <li class="product-item">
                             <div class="product-info">
                                 <div class="product-thumbnail">
-                                    <img src="<?php echo $product->getProduct()->getImageUrl()?>" alt="Cтул">
+                                    <img src="<?php echo $userProduct->getProduct()->getImageUrl()?>" alt="Cтул">
                                 </div>
                                 <div class="product-details">
-                                    <h3><?php echo $product->getProduct()->getName()?></h3>
-                                    <div class="product-quantity"><?php echo $product->getAmount()?> × <?php echo $product->getProduct()->getPrice()?></div>
+                                    <h3><?php echo $userProduct->getProduct()->getName()?></h3>
+                                    <div class="product-quantity"><?php echo $userProduct->getAmount()?> × <?php echo $userProduct->getProduct()->getPrice()?></div>
                                 </div>
                             </div>
-                            <div class="product-price"><?php echo $product->getProduct()->getPrice()?> тг</div>
+                            <div class="product-price"><?php echo $userProduct->getProduct()->getPrice()?> тг</div>
                         </li>
-                    <?php endforeach; ?>
-                </ul>
+                    </ul>
+
+
+                <?php endforeach; ?>
 
                 <div class="total-line">
                     <span>Итого:</span>
-                    <span><?php echo $total?></span>
+                    <span><?php echo $total;?></span>
                 </div>
 
                 <button type="submit" class="btn pulse">

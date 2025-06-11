@@ -2,23 +2,18 @@
 
 namespace Controllers;
 use DTO\AddCartDTO;
-use Model\Product;
-use Model\UserProduct;
 use Request\AddProductRequest;
 use Request\DecreaseProductRequest;
 use Service\CartService;
 
 class CartController extends BaseController
 {
-    private  UserProduct $userProductModel;
-    private Product $productModel;
+
     private CartService $cartService;
 
     public function __construct()
     {
         parent::__construct();
-        $this->userProductModel = new UserProduct();
-        $this->productModel = new Product();
         $this->cartService = new CartService();
     }
 
@@ -31,32 +26,17 @@ class CartController extends BaseController
         }
 
 
-        $user = $this->authService->getUser();
+        $userProducts = $this->cartService->getUserProduct();
 
 
 
-        $userProducts = $this->userProductModel->getUserProductsById($user->getId());
-
-
-        if ($userProducts !== null) {
-            $products = [];
-            $total = 0;
-            foreach ($userProducts as $userProduct) {
-                $user_productId = $userProduct->getProductId();
-
-
-                $product = $this->productModel->getProductById($user_productId);
-
-                if ($product !== null && ($userProduct->getAmount()) !== null) {
-                    $userProduct->setProduct($product);
-                    $products[] = $userProduct;
-
-                }
-            }
-            require_once '../Views/cart.php';
-        } else {
+        if (empty($userProducts)) {
             header('location: /catalog');
+            exit();
         }
+
+        $total = $this->cartService->getTotal();
+        require_once '../Views/cart.php';
     }
 
 
@@ -84,9 +64,8 @@ class CartController extends BaseController
         $errors = $request->validateAddProduct();
 
         if (empty($errors)) {
-            $user = $this->authService->getUser();
 
-            $dto = new AddCartDTO($request->getProductId(), $request->getAmount(), $user);
+            $dto = new AddCartDTO($request->getProductId(), $request->getAmount());
 
             $this->cartService->addProduct($dto);
 
@@ -109,9 +88,8 @@ class CartController extends BaseController
         $errors = $request->validateAddProduct();
 
         if(empty($errors)) {
-            $user = $this->authService->getUser();
 
-            $dto = new AddCartDTO($request->getProductId(), $request->getAmount(), $user);
+            $dto = new AddCartDTO($request->getProductId(), $request->getAmount());
 
             $this->cartService->decreaseProduct($dto);
         }

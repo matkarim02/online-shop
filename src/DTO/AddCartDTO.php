@@ -2,11 +2,11 @@
 
 namespace DTO;
 
-use Model\User;
+
 
 class AddCartDTO
 {
-    public function __construct(private int $product_id, private int $amount, private User $user)
+    public function __construct(private int $product_id, private int $amount)
     {
     }
 
@@ -20,10 +20,7 @@ class AddCartDTO
         return $this->amount;
     }
 
-    public function getUser(): User
-    {
-        return $this->user;
-    }
+
 
 
 

@@ -478,7 +478,7 @@
     <main id="orders-container">
 
 
-        <?php foreach ($newUserOrders as $newUserOrder):?>
+        <?php foreach ($userOrders as $newUserOrder):?>
             <!-- Заказ 1 -->
             <section class="order-section">
                 <div class="order-number">Заказ <?php echo $newUserOrder->getId() ?> </div>

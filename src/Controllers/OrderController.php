@@ -2,29 +2,21 @@
 
 namespace Controllers;
 use DTO\OrderCreateDTO;
-use Model\Order;
-use Model\UserProduct;
-use Model\OrderProduct;
-use Model\Product;
 use Request\HandleCheckoutRequest;
+use Service\CartService;
 use Service\OrderService;
 
 class OrderController extends BaseController
 {
 
-    private Order $orderModel;
-    private UserProduct $userProductModel;
-    private OrderProduct $orderProductModel;
-    private Product $productModel;
+
     private OrderService $orderService;
+    private  CartService $cartService;
 
     public function __construct() {
         parent::__construct();
-        $this->orderModel = new Order();
-        $this->userProductModel = new UserProduct();
-        $this->orderProductModel = new OrderProduct();
-        $this->productModel = new Product();
         $this->orderService = new OrderService();
+        $this->cartService = new CartService();
     }
 
 
@@ -38,29 +30,14 @@ class OrderController extends BaseController
             exit();
         }
 
-        $user = $this->authService->getUser();
+        $userProducts = $this->cartService->getUserProduct();
 
-        $userProducts = $this->userProductModel->getUserProductsById($user->getId());
-
-        if($userProducts !== null) {
-            $products = [];
-            $total = 0;
-            foreach($userProducts as $userProduct) {
-                $product_id = $userProduct->getProductId();
-                $product = $this->productModel->getProductById($product_id);
-                if($product !== null && ($userProduct->getAmount()) !== null) {
-                    $userProduct->setProduct($product);
-                    $products[] = $userProduct;
-                    $total += $product->getPrice()*$userProduct->getAmount();
-                }
-
-            }
-        } else {
+        if(empty($userProducts)){
             header('location: /catalog');
             exit();
         }
 
-
+        $total = $this->cartService->getTotal();
         require_once "./../Views/order_form.php";
     }
 
@@ -82,38 +59,16 @@ class OrderController extends BaseController
 
         $errors = $request->validateCheckoutForm();
 
-        $user = $this->authService->getUser();
 
-        $userProducts = $this->userProductModel->getUserProductsById($user->getId());
 
-        if($userProducts !== null) {
-            $products = [];
-            $total = 0;
-            foreach($userProducts as $userProduct) {
-                $product_id = $userProduct->getProductId();
-                $product = $this->productModel->getProductById($product_id);
-                if($product !== null && ($userProduct->getAmount()) !== null) {
-                    $userProduct->setProduct($product);
-                    $products[] = $userProduct;
-                    $total += $product->getPrice()*$userProduct->getAmount();
-                }
-
-            }
-        } else {
-            header('location: /catalog');
-            exit();
-        }
 
         if(empty($errors)) {
-
-            $user = $this->authService->getUser();
 
             $dto = new OrderCreateDTO(
                 $request->getName(),
                 $request->getPhone(),
                 $request->getComment(),
                 $request->getAddress(),
-                $user
             );
 
             $this->orderService->createOrder($dto);
@@ -123,6 +78,13 @@ class OrderController extends BaseController
 
 
         } else {
+            $userProducts = $this->cartService->getUserProduct();
+
+            if(empty($userProducts)){
+                header('location: /catalog');
+                exit();
+            }
+            $total = $this->cartService->getTotal();
             require_once "./../Views/order_form.php";
         }
 
@@ -141,41 +103,8 @@ class OrderController extends BaseController
             exit();
         }
 
-        $user = $this->authService->getUser();
+        $userOrders = $this->orderService->getAll();
 
-        $userOrders = $this->orderModel->getAllByUserId($user->getId());
-
-        $newUserOrders = [];
-
-        if($userOrders){
-            foreach($userOrders as $userOrder){
-                $orderId = $userOrder->getId();
-                $orderProducts = $this->orderProductModel->getAllByOrderId($orderId);
-
-                if($orderProducts !== null){
-                    $orderProductDetails = [];
-                    $sumAll = 0;
-
-                    foreach ($orderProducts as $orderProduct){
-                        $productId = $orderProduct->getProductId();
-                        $product = $this->productModel->getProductById($productId);
-                        $orderProduct->setProduct($product);
-                        $orderProduct->setProductTotal($orderProduct->getProduct()->getPrice() * $orderProduct->getAmount());
-
-                        $orderProductDetails[] = $orderProduct;
-                        $sumAll += $orderProduct->getProductTotal();
-                    }
-
-                    $userOrder->setSumAll($sumAll);
-                    $userOrder->setProductDetails($orderProductDetails);
-
-                    $newUserOrders[] = $userOrder;
-
-                }
-            }
-        } else {
-            header('Location: /catalog');
-        }
         require_once "./../Views/user_order_page.php";
 
     }

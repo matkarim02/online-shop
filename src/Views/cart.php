@@ -184,21 +184,21 @@
 <div class="cart-container">
     <h2 class="cart-title">🛒 Ваша корзина</h2>
 
-    <?php foreach($products as $product): ?>
+    <?php foreach($userProducts as $userProduct): ?>
         <div class="cart-item">
-            <img src="<?php echo $product->getProduct()->getImageUrl();?>" alt="Продукт 1">
+            <img src="<?php echo $userProduct->getProduct()->getImageUrl();?>" alt="Продукт 1">
             <div class="cart-details">
-                <h3><?php echo $product->getProduct()->getName(); ?></h3>
-                <p><?php echo $product->getProduct()->getDescription(); ?></p>
+                <h3><?php echo $userProduct->getProduct()->getName(); ?></h3>
+                <p><?php echo $userProduct->getProduct()->getDescription(); ?></p>
             </div>
-            <input type="text" class="quantity-input" id = "amount"  value="<?php echo $product->getAmount();?>" min="1">
-            <p class="price"><?php echo $product->getProduct()->getPrice(); $total += $product->getProduct()->getPrice() * $product->getAmount()?> тг</p>
+            <input type="text" class="quantity-input" id = "amount"  value="<?php echo $userProduct->getAmount();?>" min="1">
+            <p class="price"><?php echo $userProduct->getProduct()->getPrice();?> тг</p>
             <button class="remove-btn"><i class="fas fa-trash"></i></button>
         </div>
     <?php endforeach; ?>
 
     <div class="checkout-container">
-        <h3 class="total-price">Total: <?php echo $total ?></h3>
+        <h3 class="total-price">Total: <?php echo $total; ?></h3>
         <button class="checkout-btn" onclick="window.location.href='/create-order'"><i class="fas fa-money-bill-wave"></i> Оформить заказ</button>
     </div>
 </div>

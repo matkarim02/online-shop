@@ -12,6 +12,8 @@ class UserProduct extends Model
 
     private Product $product;
 
+    private int $totalSum;
+
 
     protected function getTableName(): string
     {
@@ -96,6 +98,18 @@ class UserProduct extends Model
     {
         $this->product = $product;
     }
+
+    public function getTotalSum(): int
+    {
+        return $this->totalSum;
+    }
+
+    public function setTotalSum(int $totalSum): void
+    {
+        $this->totalSum = $totalSum;
+    }
+
+
 
 
 
