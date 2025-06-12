@@ -1,0 +1,35 @@
+[2025-06-12 02:52:34] Exception: Для оформления заказа сумма корзины должна быть больше 12000
+File: /var/www/html/src/Service/OrderService.php (Line 38)
+Trace: #0 /var/www/html/src/Controllers/OrderController.php(74): Service\OrderService->createOrder(Object(DTO\OrderCreateDTO))
+#1 /var/www/html/src/Core/App.php(33): Controllers\OrderController->handleCheckout(Object(Request\HandleCheckoutRequest))
+#2 /var/www/html/src/public/index.php(56): Core\App->run()
+#3 {main}
+--------------------------------------------------------------------------------
+[2025-06-12 02:54:13] Exception: Для оформления заказа сумма корзины должна быть больше 12000
+File: /var/www/html/src/Service/OrderService.php (Line 38)
+Trace: #0 /var/www/html/src/Controllers/OrderController.php(74): Service\OrderService->createOrder(Object(DTO\OrderCreateDTO))
+#1 /var/www/html/src/Core/App.php(33): Controllers\OrderController->handleCheckout(Object(Request\HandleCheckoutRequest))
+#2 /var/www/html/src/public/index.php(56): Core\App->run()
+#3 {main}
+--------------------------------------------------------------------------------
+[2025-06-12 03:22:29] Exception: Для оформления заказа сумма корзины должна быть больше 12000
+File: /var/www/html/src/Service/OrderService.php (Line 38)
+Trace: #0 /var/www/html/src/Controllers/OrderController.php(74): Service\OrderService->createOrder(Object(DTO\OrderCreateDTO))
+#1 /var/www/html/src/Core/App.php(35): Controllers\OrderController->handleCheckout(Object(Request\HandleCheckoutRequest))
+#2 /var/www/html/src/public/index.php(56): Core\App->run()
+#3 {main}
+--------------------------------------------------------------------------------
+[2025-06-12 03:24:01] Exception: Для оформления заказа сумма корзины должна быть больше 12000
+File: /var/www/html/src/Service/OrderService.php (Line 38)
+Trace: #0 /var/www/html/src/Controllers/OrderController.php(74): Service\OrderService->createOrder(Object(DTO\OrderCreateDTO))
+#1 /var/www/html/src/Core/App.php(35): Controllers\OrderController->handleCheckout(Object(Request\HandleCheckoutRequest))
+#2 /var/www/html/src/public/index.php(56): Core\App->run()
+#3 {main}
+--------------------------------------------------------------------------------
+[2025-06-12 03:39:14] Exception: Для оформления заказа сумма корзины должна быть больше 12000
+File: /var/www/html/src/Service/OrderService.php (Line 38)
+Trace: #0 /var/www/html/src/Controllers/OrderController.php(74): Service\OrderService->createOrder(Object(DTO\OrderCreateDTO))
+#1 /var/www/html/src/Core/App.php(37): Controllers\OrderController->handleCheckout(Object(Request\HandleCheckoutRequest))
+#2 /var/www/html/src/public/index.php(56): Core\App->run()
+#3 {main}
+--------------------------------------------------------------------------------
