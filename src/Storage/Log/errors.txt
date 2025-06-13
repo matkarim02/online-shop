@@ -33,3 +33,52 @@ Trace: #0 /var/www/html/src/Controllers/OrderController.php(74): Service\OrderSe
 #2 /var/www/html/src/public/index.php(56): Core\App->run()
 #3 {main}
 --------------------------------------------------------------------------------
+[2025-06-12 12:16:30] Exception: Для оформления заказа сумма корзины должна быть больше 12000
+File: /var/www/html/src/Service/OrderService.php (Line 38)
+Trace: #0 /var/www/html/src/Controllers/OrderController.php(74): Service\OrderService->createOrder(Object(DTO\OrderCreateDTO))
+#1 /var/www/html/src/Core/App.php(37): Controllers\OrderController->handleCheckout(Object(Request\HandleCheckoutRequest))
+#2 /var/www/html/src/public/index.php(56): Core\App->run()
+#3 {main}
+--------------------------------------------------------------------------------
+[2025-06-12 15:32:31] Exception: Для оформления заказа сумма корзины должна быть больше 12000
+File: /var/www/html/src/Service/OrderService.php (Line 38)
+Trace: #0 /var/www/html/src/Controllers/OrderController.php(74): Service\OrderService->createOrder(Object(DTO\OrderCreateDTO))
+#1 /var/www/html/src/Core/App.php(37): Controllers\OrderController->handleCheckout(Object(Request\HandleCheckoutRequest))
+#2 /var/www/html/src/public/index.php(56): Core\App->run()
+#3 {main}
+--------------------------------------------------------------------------------
+[2025-06-12 16:36:48] Exception: Для оформления заказа сумма корзины должна быть больше 12000
+File: /var/www/html/src/Service/OrderService.php (Line 38)
+Trace: #0 /var/www/html/src/Controllers/OrderController.php(74): Service\OrderService->createOrder(Object(DTO\OrderCreateDTO))
+#1 /var/www/html/src/Core/App.php(37): Controllers\OrderController->handleCheckout(Object(Request\HandleCheckoutRequest))
+#2 /var/www/html/src/public/index.php(56): Core\App->run()
+#3 {main}
+--------------------------------------------------------------------------------
+[2025-06-12 16:40:38] Exception: Для оформления заказа сумма корзины должна быть больше 12000
+File: /var/www/html/src/Service/OrderService.php (Line 38)
+Trace: #0 /var/www/html/src/Controllers/OrderController.php(74): Service\OrderService->createOrder(Object(DTO\OrderCreateDTO))
+#1 /var/www/html/src/Core/App.php(37): Controllers\OrderController->handleCheckout(Object(Request\HandleCheckoutRequest))
+#2 /var/www/html/src/public/index.php(56): Core\App->run()
+#3 {main}
+--------------------------------------------------------------------------------
+[2025-06-12 17:40:14] Exception: Для оформления заказа сумма корзины должна быть больше 12000
+File: /var/www/html/src/Service/OrderService.php (Line 38)
+Trace: #0 /var/www/html/src/Controllers/OrderController.php(74): Service\OrderService->createOrder(Object(DTO\OrderCreateDTO))
+#1 /var/www/html/src/Core/App.php(37): Controllers\OrderController->handleCheckout(Object(Request\HandleCheckoutRequest))
+#2 /var/www/html/src/public/index.php(56): Core\App->run()
+#3 {main}
+--------------------------------------------------------------------------------
+[2025-06-13 08:00:38] Exception: Для оформления заказа сумма корзины должна быть больше 12000
+File: /var/www/html/src/Service/OrderService.php (Line 38)
+Trace: #0 /var/www/html/src/Controllers/OrderController.php(74): Service\OrderService->createOrder(Object(DTO\OrderCreateDTO))
+#1 /var/www/html/src/Core/App.php(41): Controllers\OrderController->handleCheckout(Object(Request\HandleCheckoutRequest))
+#2 /var/www/html/src/public/index.php(56): Core\App->run()
+#3 {main}
+--------------------------------------------------------------------------------
+[2025-06-13 08:01:32] Exception: Для оформления заказа сумма корзины должна быть больше 12000
+File: /var/www/html/src/Service/OrderService.php (Line 38)
+Trace: #0 /var/www/html/src/Controllers/OrderController.php(74): Service\OrderService->createOrder(Object(DTO\OrderCreateDTO))
+#1 /var/www/html/src/Core/App.php(41): Controllers\OrderController->handleCheckout(Object(Request\HandleCheckoutRequest))
+#2 /var/www/html/src/public/index.php(56): Core\App->run()
+#3 {main}
+--------------------------------------------------------------------------------
