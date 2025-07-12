@@ -9,27 +9,27 @@ class OrderProduct extends Model
     private int $order_id;
     private int $product_id;
     private int $amount;
-
-
     private Product $product;
     private float $product_total;
 
 
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
         return 'order_products';
     }
 
-    public function createOrderProducts(int $orderId, int $productId, int $amount):void
+    public static function createOrderProducts(int $orderId, int $productId, int $amount):void
     {
-        $stmt = $this->pdo->prepare("INSERT INTO {$this->getTableName()} (order_id, product_id, amount) VALUES (:orderId, :productId, :amount)");
+        $tableName = static::getTableName();
+        $stmt = static::getPOO()->prepare("INSERT INTO $tableName (order_id, product_id, amount) VALUES (:orderId, :productId, :amount)");
         $stmt->execute(['orderId' => $orderId, 'productId' => $productId, 'amount' => $amount]);
 
     }
 
-    public function getAllByOrderId(int $orderId):array|null
+    public static function getAllByOrderId(int $orderId):array|null
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE order_id = :order_id");
+        $tableName = static::getTableName();
+        $stmt = static::getPOO()->prepare("SELECT * FROM $tableName WHERE order_id = :order_id");
         $stmt->execute(['order_id' => $orderId]);
         $orderProducts = $stmt->fetchAll();
 
@@ -39,15 +39,64 @@ class OrderProduct extends Model
 
         $newOrderProducts = [];
         foreach ($orderProducts as $orderProduct) {
-            $obj = new self();
-            $obj->id = $orderProduct['id'];
-            $obj->order_id = $orderProduct['order_id'];
-            $obj->product_id = $orderProduct['product_id'];
-            $obj->amount = $orderProduct['amount'];
-            $newOrderProducts[] = $obj;
+
+            $newOrderProducts[] = static::createObj($orderProduct);
         }
 
         return $newOrderProducts;
+    }
+
+
+    public static function getAllByOrderIdWithProduct(int $orderId):array|null
+    {
+        $tableName = static::getTableName();
+        $stmt = static::getPOO()->prepare("SELECT * FROM $tableName op INNER JOIN products p 
+                                                 ON op.product_id = p.id
+                                                 WHERE op.order_id = :order_id");
+        $stmt->execute(['order_id' => $orderId]);
+        $orderProducts = $stmt->fetchAll();
+
+        if(empty($orderProducts)){
+            return null;
+        }
+
+        $newOrderProducts = [];
+        foreach ($orderProducts as $orderProduct) {
+
+            $newOrderProducts[] = static::createObjWithProduct($orderProduct);
+        }
+
+        return $newOrderProducts;
+    }
+
+    public static function createObj(array $data): self|null
+    {
+        if(!$data){
+            return null;
+        }
+
+        $obj = new self();
+        $obj->id = $data['id'];
+        $obj->order_id = $data['order_id'];
+        $obj->product_id = $data['product_id'];
+        $obj->amount = $data['amount'];
+
+        return $obj;
+    }
+
+    public static function createObjWithProduct(array $data):self|null
+    {
+        if(!$data){
+            return null;
+        }
+
+        $obj = static::createObj($data);
+
+        $product = Product::createObj($data, $data['product_id']);
+        $obj->setProduct($product);
+
+        return $obj;
+
     }
 
     public function getOrderId(): int

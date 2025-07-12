@@ -54,8 +54,7 @@ class EditProfileRequest
                 $errors['email'] = 'Электронная почта должна быть правильным';
             } else {
 
-                $userModel = new User();
-                $user = $userModel->getByEmail($email);
+                $user = User::getByEmail($email);
 
                 $authService = new AuthSessionService();
                 $userCurrent = $authService->getUser();

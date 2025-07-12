@@ -2,7 +2,7 @@
 
 namespace Controllers;
 
-use DTO\AddCartDTO;
+
 use DTO\AuthUserDTO;
 use Model\User;
 use Request\EditProfileRequest;
@@ -11,11 +11,9 @@ use Request\RegistrateRequest;
 
 class UserController extends BaseController
 {
-    private User $userModel;
     public function __construct()
     {
         parent::__construct();
-        $this->userModel = new User();
     }
 
 
@@ -46,7 +44,7 @@ class UserController extends BaseController
 
 
 
-            $this->userModel->insertToUsers($request->getName(), $request->getEmail(), $password);
+            User::insertToUsers($request->getName(), $request->getEmail(), $password);
 
 
 //    $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
@@ -185,17 +183,17 @@ class UserController extends BaseController
         if (empty($errors)) {
 
             if ($user->getName() !== $request->getName()) {
-                $this->userModel->updateNameById($user->getId(), $request->getName());
+                User::updateNameById($user->getId(), $request->getName());
             }
             if ($user->getEmail() !== $request->getEmail()) {
 
-                $this->userModel->updateEmailById($user->getId(), $request->getEmail());
+                User::updateEmailById($user->getId(), $request->getEmail());
 
             }
             if (!empty($request->getPassword())) {
                 $psw = $request->getPassword();
                 $psw = password_hash($psw, PASSWORD_DEFAULT);
-                $this->userModel->updatePasswordById($user->getId(), $psw);
+                User::updatePasswordById($user->getId(), $psw);
 
             }
 

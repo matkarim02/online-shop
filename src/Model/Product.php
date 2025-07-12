@@ -18,15 +18,15 @@ class Product extends Model
     private float $avg_rating = 0.0;
 
 
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
         return 'products';
     }
 
-    public function getAllProduct(): array|null
+    public static function getAllProduct(): array|null
     {
-
-        $stmt = $this->pdo->query("SELECT * FROM {$this->getTableName()}");
+        $tableName = static::getTableName();
+        $stmt = static::getPOO()->query("SELECT * FROM $tableName");
         $products = $stmt->fetchAll();
 
         if(empty($products)){
@@ -35,16 +35,16 @@ class Product extends Model
 
         $newProducts = [];
         foreach ($products as $product){
-            $newProducts[] = $this->createObj($product);
+            $newProducts[] = static::createObj($product);
         }
         return $newProducts;
     }
 
 
-    public function getProductById(int $user_productId): self|null
+    public static function getProductById(int $user_productId): self|null
     {
-
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE id = :productId");
+        $tableName = static::getTableName();
+        $stmt = static::getPOO()->prepare("SELECT * FROM $tableName WHERE id = :productId");
         $stmt->execute(['productId' => $user_productId]);
         $product = $stmt->fetch();
 
@@ -52,14 +52,24 @@ class Product extends Model
             return null;
         }
 
-        return $this->createObj($product);
+        return static::createObj($product);
     }
 
 
-    public function createObj(array $data):self
+    public static function createObj(array $data, int $id = null):self|null
     {
+        if(!$data){
+            return null;
+        }
+
         $obj = new self();
-        $obj->id = $data['id'];
+
+        if($id !== null){
+            $obj->id = $id;
+        } else {
+            $obj->id = $data['id'];
+        }
+
         $obj->name = $data['name'];
         $obj->description = $data['description'];
         $obj->price = $data['price'];

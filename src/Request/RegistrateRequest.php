@@ -53,9 +53,7 @@ class RegistrateRequest
                 $errors['email'] = 'Электронная почта должна быть правильным';
             } else {
 
-
-                $userModel = new User();
-                $count_email = $userModel->getByEmail($email);
+                $count_email = User::getByEmail($email);
 
                 if ($count_email) {
                     $errors['email'] = 'Электронная почта занята';

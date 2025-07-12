@@ -5,12 +5,15 @@ use PDO;
 
 abstract class Model
 {
-    protected PDO $pdo;
+    protected static PDO $pdo;
 
-    public function __construct(){
-        $this->pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname=mydb', 'user', 'pass');
+    public static function getPOO(): PDO
+    {
+        static::$pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname=mydb', 'user', 'pass');
+
+        return static::$pdo;
     }
 
-    abstract protected function getTableName(): string;
+    abstract static protected function getTableName(): string;
 
 }

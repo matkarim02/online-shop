@@ -9,16 +9,10 @@ use Request\GetProductRequest;
 
 class CatalogController extends BaseController
 {
-    private Product $productModel;
-    private UserProduct $userProductModel;
-    private Review $reviewModel;
 
     public function __construct()
     {
         parent::__construct();
-        $this->productModel = new Product();
-        $this->userProductModel = new UserProduct();
-        $this->reviewModel = new Review();
     }
 
     public function getCatalog()
@@ -30,14 +24,14 @@ class CatalogController extends BaseController
             exit();
         }
         $user = $this->authService->getUser();
-        $products = $this->productModel->getAllProduct();
+        $products = Product::getAllProduct();
 
 
         if($products !== null){
             $newProducts = [];
             foreach ($products as $product)
             {
-                $user_product = $this->userProductModel->getById($user->getId(), $product->getId());
+                $user_product = UserProduct::getById($user->getId(), $product->getId());
                 if($user_product === null) {
                     $user_product = new UserProduct();
                     $user_product->setAmount(0);
@@ -58,9 +52,9 @@ class CatalogController extends BaseController
         }
 
         $product_id = $request->getProductId();
-        $product = $this->productModel->getProductById($product_id);
-        $reviews = $this->reviewModel->getProductReviewsByProductId($product_id);
-        $avg_rating = $this->reviewModel->getAvgRatingByProductId($product_id);
+        $product = Product::getProductById($product_id);
+        $reviews = Review::getProductReviewsByProductId($product_id);
+        $avg_rating = Review::getAvgRatingByProductId($product_id);
 
 
 
@@ -98,16 +92,16 @@ class CatalogController extends BaseController
 
 
 
-        $this->reviewModel->setProductReview(
+        Review::setProductReview(
             $request->getProductId(),
             $request->getAuthor(),
             $request->getText(),
             $request->getRating()
         );
 
-        $product = $this->productModel->getProductById($request->getProductId());
-        $reviews = $this->reviewModel->getProductReviewsByProductId($request->getProductId());
-        $avg_rating = $this->reviewModel->getAvgRatingByProductId($request->getProductId());
+        $product = Product::getProductById($request->getProductId());
+        $reviews = Review::getProductReviewsByProductId($request->getProductId());
+        $avg_rating = Review::getAvgRatingByProductId($request->getProductId());
 
 
 

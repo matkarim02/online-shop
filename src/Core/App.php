@@ -5,11 +5,19 @@ use Controllers\CartController;
 use Controllers\CatalogController;
 use Controllers\UserController;
 use Controllers\OrderController;
+use Model\ErrorLogs;
 use Request\AddProductRequest;
+use Service\Logger\LoggerDbService;
+use Service\Logger\LoggerFileService;
+use Service\Logger\LoggerInterface;
+
 
 class App
 {
     private array $routes = [];
+    private LoggerInterface $loggerDbService;
+    //private LoggerInterface $loggerFileService;
+
 
     public function run(): void
     {
@@ -27,12 +35,26 @@ class App
 
                 $controller = new $class();
 
-                if($requestClass !== null){
-                    $request = new $requestClass($_POST);
-                    $controller->$method($request);
-                } else {
-                    $controller->$method();
+                try {
+                    if($requestClass !== null){
+                        $request = new $requestClass($_POST);
+                        $controller->$method($request);
+                    } else {
+                        $controller->$method();
+                    }
+                } catch (\Throwable $exception) {
+
+                    $this->loggerDbService = new LoggerDbService();
+                    $this->loggerDbService->createLogs($exception);
+
+
+                    //$this->loggerFileService = new LoggerFileService();
+                    //$this->loggerFileService->createLogs($exception);
+
+
+                    require_once "./../Views/500.php";
                 }
+
 
 
 

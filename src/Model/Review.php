@@ -15,14 +15,15 @@ class Review extends Model
 
 
 
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
        return 'reviews';
     }
 
-    public function getProductReviewsByProductId(int $product_id): array|null
+    public static function getProductReviewsByProductId(int $product_id): array|null
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE product_id = :product_id");
+        $tableName = static::getTableName();
+        $stmt = static::getPOO()->prepare("SELECT * FROM $tableName WHERE product_id = :product_id");
         $stmt->execute(['product_id' => $product_id]);
         $products = $stmt->fetchall();
 
@@ -34,14 +35,14 @@ class Review extends Model
 
         foreach ($products as $product)
         {
-            $newProducts[] = $this->createObj($product);
+            $newProducts[] = static::createObj($product);
         }
         return  $newProducts;
 
 
     }
 
-    public function createObj(array $data):self
+    public static function createObj(array $data):self
     {
         $obj = new self();
         $obj->id = $data['id'];
@@ -54,9 +55,10 @@ class Review extends Model
         return $obj;
     }
 
-    public function getAvgRatingByProductId(int $product_id): ?float
+    public static function getAvgRatingByProductId(int $product_id): ?float
     {
-        $stmt = $this->pdo->prepare("SELECT AVG(rating) AS average_rating FROM reviews WHERE product_id = :product_id");
+        $tableName = static::getTableName();
+        $stmt = static::getPOO()->prepare("SELECT AVG(rating) AS average_rating FROM $tableName WHERE product_id = :product_id");
         $stmt->execute(['product_id' => $product_id]);
         $result = $stmt->fetch();
 
@@ -68,9 +70,10 @@ class Review extends Model
     }
 
 
-    public function setProductReview(int $product_id, string $author, string $text, int $rating):void
+    public static function setProductReview(int $product_id, string $author, string $text, int $rating):void
     {
-        $stmt = $this->pdo->prepare("INSERT INTO {$this->getTableName()} (product_id, author, text, rating) VALUES (:product_id, :author, :text, :rating)");
+        $tableName = static::getTableName();
+        $stmt = static::getPOO()->prepare("INSERT INTO $tableName (product_id, author, text, rating) VALUES (:product_id, :author, :text, :rating)");
         $stmt->execute(['product_id' => $product_id, 'author' => $author, 'text' => $text, 'rating' => $rating]);
     }
 

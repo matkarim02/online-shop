@@ -16,14 +16,15 @@ class Order extends Model
     private array $product_details = [];
 
 
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
         return 'orders';
     }
 
-    public function createOrder(string $contactName, string $contactPhone, string $address, string $comments, int $user_id)
+    public static function createOrder(string $contactName, string $contactPhone, string $address, string $comments, int $user_id)
     {
-        $stmt = $this->pdo->prepare("INSERT INTO {$this->getTableName()} (contact_name, contact_phone, address, comment, user_id) 
+        $tableName = static::getTableName();
+        $stmt = static::getPOO()->prepare("INSERT INTO $tableName (contact_name, contact_phone, address, comment, user_id) 
                                             VALUES (:contact_name, :contact_phone, :address, :comment, :user_id) RETURNING id"
         );
         $stmt->execute([
@@ -39,9 +40,10 @@ class Order extends Model
 
     }
 
-    public function getAllByUserId(int $user_id): array|null
+    public static function getAllByUserId(int $user_id): array|null
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id");
+        $tableName = static::getTableName();
+        $stmt = static::getPOO()->prepare("SELECT * FROM $tableName WHERE user_id = :user_id");
         $stmt->execute([':user_id' => $user_id]);
         $userOrders = $stmt->fetchAll();
 
@@ -51,12 +53,13 @@ class Order extends Model
         $newUserOrders = [];
 
         foreach ($userOrders as $userOrder) {
-            $newUserOrders[] = $this->createObj($userOrder);
+            $newUserOrders[] = static::createObj($userOrder);
         }
         return $newUserOrders;
     }
 
-    public function createObj(array $data): self
+
+    public static function createObj(array $data): self
     {
         $obj = new self();
         $obj->id = $data['id'];

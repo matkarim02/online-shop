@@ -29,8 +29,7 @@ class AddProductRequest
         if (!empty($this->data['product_id'])) {
             $product_id = (int)$this->data['product_id'];
 
-            $productModel = new Product();
-            $product = $productModel->getProductById($product_id);
+            $product = Product::getProductById($product_id);
 
             if ($product === false) {
                 $errors['product_id'] = "Product does not exist";

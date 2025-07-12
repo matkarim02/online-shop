@@ -12,25 +12,27 @@ use Service\Auth\AuthSessionService;
 
 class OrderService
 {
-    private Order $orderModel;
-    private UserProduct $userProductModel;
-    private OrderProduct $orderProductModel;
     private AuthInterface $authService;
-    private Product $productModel;
+    private CartService $cartService;
 
     public function __construct()
     {
-        $this->orderModel = new Order();
-        $this->userProductModel = new UserProduct();
-        $this->orderProductModel = new OrderProduct();
         $this->authService = new AuthSessionService();
-        $this->productModel = new Product();
+        $this->cartService = new CartService();
     }
 
     public function createOrder(OrderCreateDTO $data):void
     {
+
+        $sumAll = $this->cartService->getTotal();
+
+        if($sumAll < 12000) {
+            throw new \Exception('Для оформления заказа сумма корзины должна быть больше 12000');
+        }
+
         $user = $this->authService->getUser();
-        $orderId = $this->orderModel->createOrder(
+        $userProducts = UserProduct::getUserProductsById($user->getId());
+        $orderId = Order::createOrder(
             $data->getContactName(),
             $data->getContactPhone(),
             $data->getAddress(),
@@ -38,45 +40,43 @@ class OrderService
             $user->getId()
         );
 
-        $userProducts = $this->userProductModel->getUserProductsById($user->getId());
-
         foreach ($userProducts as $userProduct) {
             $productId = $userProduct->getProductId();
             $amount = $userProduct->getAmount();
-            $this->orderProductModel->createOrderProducts($orderId, $productId, $amount);
+            OrderProduct::createOrderProducts($orderId, $productId, $amount);
         }
 
-        $this->userProductModel->deleteByUserId($user->getId());
+        UserProduct::deleteByUserId($user->getId());
     }
 
     public function getAll(): array
     {
         $user = $this->authService->getUser();
 
-        $userOrders = $this->orderModel->getAllByUserId($user->getId());
+        $userOrders = Order::getAllByUserId($user->getId());
 
-        if($userOrders)
+        if($userOrders){
+            foreach($userOrders as $userOrder){
+                $orderId = $userOrder->getId();
+                $orderProducts = OrderProduct::getAllByOrderIdWithProduct($orderId);
 
-        foreach($userOrders as $userOrder){
-            $orderId = $userOrder->getId();
-            $orderProducts = $this->orderProductModel->getAllByOrderId($orderId);
+                if($orderProducts !== null){
+                    $sumAll = 0;
 
-            if($orderProducts !== null){
-                $sumAll = 0;
+                    foreach ($orderProducts as $orderProduct){
+                        $productTotal = $orderProduct->getProduct()->getPrice() * $orderProduct->getAmount();
+                        $orderProduct->setProductTotal($productTotal);
+                        $sumAll += $orderProduct->getProductTotal();
+                    }
 
-                foreach ($orderProducts as $orderProduct){
-                    $product = $this->productModel->getProductById($orderProduct->getProductId());
-                    $orderProduct->setProduct($product);
-                    $productTotal = $orderProduct->getProduct()->getPrice() * $orderProduct->getAmount();
-                    $orderProduct->setProductTotal($productTotal);
-                    $sumAll += $orderProduct->getProductTotal();
+                    $userOrder->setSumAll($sumAll);
+                    $userOrder->setProductDetails($orderProducts);
+
                 }
-
-                $userOrder->setSumAll($sumAll);
-                $userOrder->setProductDetails($orderProducts);
-
             }
         }
+
+
 
         return $userOrders;
     }
