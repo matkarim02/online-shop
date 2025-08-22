@@ -67,11 +67,15 @@ class CartController extends BaseController
 
             $dto = new AddCartDTO($request->getProductId(), $request->getAmount());
 
-            $this->cartService->addProduct($dto);
+                $amount = $this->cartService->addProduct($dto);
+                $result = [
+                    'amount' => $amount
+                ];
 
+                echo json_encode($result);
 
         }
-        header('location: /catalog');
+
 
     }
 
@@ -91,11 +95,16 @@ class CartController extends BaseController
 
             $dto = new AddCartDTO($request->getProductId(), $request->getAmount());
 
-            $this->cartService->decreaseProduct($dto);
+            $amount = $this->cartService->decreaseProduct($dto);
+
+            $result = [
+                'amount' => $amount
+            ];
+
+            echo json_encode($result);
         }
 
 
-        header("Location: /catalog");
 
     }
 }

@@ -183,15 +183,15 @@
                 </div>
 
                 <div class="product-controls">
-                    <form action="/cart-decrease" method="POST">
+                    <form class="cart-decreaser" method="POST" onsubmit="return false">
                         <input type="hidden" name="product_id" value="<?php echo $newProduct->getId(); ?>">
                         <input type="hidden" name="amount" class="amount-field" value="1">
                         <button type="submit" class="form-button">-</button>
                     </form>
 
-                    <input type="number" name="amount" class="amount-field" value="<?php echo $newProduct->getUserProduct()->getAmount(); ?>" readonly>
+                    <span class="amount-field"><?php echo $newProduct->getUserProduct()->getAmount(); ?></span>
 
-                    <form action="/cart-increase" method="POST">
+                    <form class="cart-increase" method="POST" onsubmit="return false">
                         <input type="hidden" name="product_id" value="<?php echo $newProduct->getId(); ?>">
                         <input type="hidden" name="amount" class="amount-field" value="1">
                         <button type="submit" class="form-button">+</button>
@@ -210,4 +210,101 @@
     </div>
 </div>
 </body>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function() {
+        // console.log($(this).serialize());
+
+        $('.cart-increase').submit(function(e) {
+            e.preventDefault(); // предотвращаем перезагрузку страницы
+
+            $.ajax({
+                type: "POST",
+                url: "/cart-increase",
+                data: $(this).serialize(), // например: product_id=1&amount=10
+                dataType: 'json',
+                success: function(response) {
+                    console.log('test');
+                    // Обновляем количество товаров в бейдже корзины
+                    $('.amount-field').text(response.amount);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ошибка при добавлении товара:', error);
+                }
+            });
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        // console.log($(this).serialize());
+
+        $('.cart-decreaser').submit(function(e) {
+            e.preventDefault(); // предотвращаем перезагрузку страницы
+
+            $.ajax({
+                type: "POST",
+                url: "/cart-decrease",
+                data: $(this).serialize(), // например: product_id=1&amount=10
+                dataType: 'json',
+                success: function(response) {
+                    console.log('test');
+                    // Обновляем количество товаров в бейдже корзины
+                    $('.amount-field').text(response.amount);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ошибка при добавлении товара:', error);
+                }
+            });
+        });
+    });
+</script>
+
+
+<!--<script>-->
+<!--    $("document").ready(function () {-->
+<!--        $('.cart-decreaser').submit(function () {-->
+<!--            $.ajax({-->
+<!--                type: "POST",-->
+<!--                url: "/cart-decrease",-->
+<!--                data: $(this).serialize(),-->
+<!--                dataType: 'json',-->
+<!--                success: function (response) {-->
+<!--                    console.log(response);-->
+<!--                    // Обновляем количество товаров в бейдже корзины-->
+<!--                    $('.amount-field').val(response.amount);-->
+<!--                },-->
+<!--                error: function(xhr, status, error) {-->
+<!--                    console.error('Ошибка при добавлении товара:', error);-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+<!---->
+<!--<script>-->
+<!--    $("document").ready(function () {-->
+<!--        $('.cart-increase').submit(function () {-->
+<!--            $.ajax({-->
+<!--                type: "POST",-->
+<!--                url: "/cart-increase",-->
+<!--                data: $(this).serialize(),-->
+<!--                dataType: 'json',-->
+<!--                success: function (response) {-->
+<!--                    console.log(response);-->
+<!--                    // Обновляем количество товаров в бейдже корзины-->
+<!--                    $('.amount-field').text(response.amount);-->
+<!--                },-->
+<!--                error: function(xhr, status, error) {-->
+<!--                    console.error('Ошибка при добавлении товара:', error);-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+
 </html>

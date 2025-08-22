@@ -28,8 +28,7 @@ $app->get('/catalog', CatalogController::class, 'getCatalog');
 // Профиль
 $app->get('/profile', UserController::class, 'getProfile');
 
-// отзыв продутка
-
+// отзыв продукта
 $app->post('/product', CatalogController::class, 'getProduct', \Request\GetProductRequest::class);
 $app->post('/add-review', CatalogController::class, 'addReview', \Request\AddReviewRequest::class);
 
